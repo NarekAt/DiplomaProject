@@ -1,0 +1,3 @@
+graph_generator -size 2048 -probability 0.3 -core_type bitsets_full -output_file ../ng_graphs/graph__N2048_p0.3.txt
+alternate_property_computer -np 4 -randomization_type fixed_degree -alternate_property_type triangle_count -step_count 1000 -graph_file ../ng_graphs/graph__N64_p0.3.txt -mu_file ../mus/m1.txt
+alternate_property_computer -np 4 -randomization_type random_switch -alternate_property_type triangle_count -step_count 1000 -graph_file ../ng_graphs/graph__N512_p0.3.txt -mu_file ../mus/m1.txt

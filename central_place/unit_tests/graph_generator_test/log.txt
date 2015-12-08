@@ -1,0 +1,6 @@
+
+>>>>> Generation Started: Sun Dec  6 19:29:12 2015
+
+>>>>> Generation Finished: Sun Dec  6 19:29:12 2015
+
+>>>>> Generated graph contains 1493 edges
