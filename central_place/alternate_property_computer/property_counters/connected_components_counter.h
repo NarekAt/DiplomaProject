@@ -1,3 +1,10 @@
+//////////////////////////////////////////////////////////
+//      Description:                                    //
+//          Parallel multithreaded version of           //
+//          Shiloach-Vishkin algorithm for finding      //
+//          the connected components of a graph.        //
+//////////////////////////////////////////////////////////
+
 #ifndef INCLUDED__CONNECTED_COMPONENTS_COUNTER_HPP
 #define INCLUDED__CONNECTED_COMPONENTS_COUNTER_HPP
 

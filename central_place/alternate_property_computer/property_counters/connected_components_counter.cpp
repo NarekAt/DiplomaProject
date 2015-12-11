@@ -3,6 +3,7 @@
 
 #include "graph.h"
 #include <atomic>
+#include <iostream>
 
 ConnectedComponentsCounter::ResultCollection
 ConnectedComponentsCounter::calculate(const graph_types::graph& g)
@@ -32,7 +33,7 @@ ConnectedComponentsCounter::calculate(const graph_types::graph& g)
         });
 
         MT::parallel_for(0, res.size() - 1, [&](int index){
-                auto current = res[index];
+                auto& current = res[index];
                 //while used because value can be changed in another thread
                 while(current != res[current])
                 {

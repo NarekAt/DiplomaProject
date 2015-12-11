@@ -15,9 +15,9 @@ void parallel_for(unsigned int first, unsigned int last, Function f)
 
     unsigned int const min_per_thread = 25;
 
-    if (length < (2*min_per_thread))
+    if (length < (2 * min_per_thread))
     {
-        for (; first != last; ++first)
+        for (; first <= last; ++first)
         {
             f(first);
         }
