@@ -8,6 +8,9 @@
 #include <mutex>
 #include <condition_variable>
 
+namespace MT
+{
+
 class ThreadSafeWave
 {
     typedef graph_types::BFS        BFS;
@@ -86,4 +89,5 @@ private:
     std::condition_variable condVar_;
 };
 
+} // namespace MT
 #endif // INCLUDED__THREADSAFE_WAVE_HPP
