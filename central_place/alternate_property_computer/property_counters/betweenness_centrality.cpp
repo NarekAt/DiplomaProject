@@ -6,38 +6,56 @@
 #include <stack>
 #include <queue>
 
-#define MULTIPLE_TYPEDEF MULTIPLE_TYPEDEF4
+#define MULTIPLE_TYPEDEF MULTIPLE_TYPEDEF2
 
 namespace
 {
 
 class StepExecutor
 {
-private:
-    typedef BC::vertex                      vertex;
-    typedef BC::IndexType                   IndexType;
-
+    typedef graph_types::vertex             vertex;
+    typedef std::vector<int>                Distances;
     MULTIPLE_TYPEDEF(std::vector<vertex>,   VertexPredecessors,
-                                            ShortestPathCounts,
-                                            Distances,
-                                            Dependencies);
+                                            ShortestPathCounts);
 
+    typedef std::vector<double>             Dependencies;
     typedef std::vector<VertexPredecessors> VertexPredecessorsCollection;
     typedef std::stack<vertex>              ReachableVertices;
 
+    struct StepInfo
+    {
+        StepInfo(const BC::ResultCollection& res)
+            : vpc_(res.size())
+            , spc_(res.size(), 0u)
+            , d_(res.size(), -1)
+            , deps_(res.size(), 0.0)
+        {}
+
+        VertexPredecessorsCollection vpc_;
+        Dependencies deps_;
+        ShortestPathCounts spc_;
+        Distances d_;
+    };
 public:
-    StepExecutor()
-        : vpc_(res_.size())
-        , spc_(res_.size(), 0)
-        , d_(res_.size(), -1)
-        , deps_(res_.size(), 0)
+    typedef unsigned long   IndexType;
+
+public:
+    StepExecutor(const graph_types::graph& g, BC::ResultCollection& res)
+        : res_(res)
+        , g_(g)
+        , info_(res)
     {}
+
+    void prepare()
+    {
+        info_ = StepInfo(res_);
+    }
 
     void operator()(IndexType index)
     {
         ReachableVertices s;
-        spc_[index] = 1u;
-        d_[index] = 0u;
+        info_.spc_[index] = 1u;
+        info_.d_[index] = 0;
 
         std::queue<vertex> verticesToVisit;
         verticesToVisit.push(index);
@@ -51,17 +69,17 @@ public:
             const auto neighbors = g_.neighbors_sequence(v);
             MT::parallel_for(0, neighbors.size() - 1, [&](IndexType i){
                     const vertex w = neighbors[i];
-                    auto& distance = d_[w];
-                    const auto& possibleDistance = d_[v] + 1u;
-                    if (distance < 0u)
+                    auto& distance = info_.d_[w];
+                    const auto& possibleDistance = info_.d_[v] + 1;
+                    if (distance < 0)
                     {
                         verticesToVisit.push(w);
                         distance = possibleDistance;
                     }
                     if (distance == possibleDistance)
                     {
-                        spc_[w] += spc_[v];
-                        vpc_[w].push_back(v);
+                        info_.spc_[w] += info_.spc_[v];
+                        info_.vpc_[w].push_back(v);
                     }
             });
         }
@@ -69,35 +87,23 @@ public:
         {
             const vertex w = s.top();
             s.pop();
-            for (auto& v : vpc_[w])
+            for (auto& v : info_.vpc_[w])
             {
-                deps_[v] += (spc_[v] / spc_[w]) * (1 + deps_[w]);
+                info_.deps_[v] += (info_.spc_[v] / info_.spc_[w]) * (1 + info_.deps_[w]);
             }
             if (w != index)
             {
-                res_[w] += deps_[w];
+                res_[w] += info_.deps_[w];
             }
         }
     }
 
-    static void init(const graph_types::graph& g, const BC::ResultCollection& res)
-    {
-        g_ = g;
-        res_ = res;
-    }
-
 private:
-    static BC::ResultCollection res_;
-    static graph_types::graph g_;
+    BC::ResultCollection& res_;
+    const graph_types::graph& g_;
 
-    VertexPredecessorsCollection vpc_;
-    Dependencies deps_;
-    ShortestPathCounts spc_;
-    Distances d_;
+    StepInfo info_;
 };
-
-BC::ResultCollection StepExecutor::res_;
-graph_types::graph StepExecutor::g_;
 
 }
 
@@ -108,11 +114,11 @@ BC::calculate(const graph_types::graph& g)
     if (0u == size)
         return ResultCollection();
 
-    ResultCollection res (size, 0u);
-    StepExecutor::init(g, res);
+    ResultCollection res (size, 0.0);
+    StepExecutor exec(g, res);
 
-    MT::parallel_for(0, size - 1, [&](IndexType index) {
-        StepExecutor exec;
+    MT::parallel_for(0, size - 1, [&](StepExecutor::IndexType index) {
+        exec.prepare();
         exec(index);
     });
     return res;

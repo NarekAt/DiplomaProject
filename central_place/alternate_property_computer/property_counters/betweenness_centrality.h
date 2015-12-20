@@ -12,9 +12,7 @@ namespace graph_types
 class BC
 {
 public:
-    typedef unsigned long       IndexType;
-    typedef graph_types::vertex vertex;
-    typedef std::vector<IndexType> ResultCollection;
+   typedef std::vector<double> ResultCollection;
 
 public:
     static ResultCollection calculate(const graph_types::graph& g);
