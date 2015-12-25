@@ -6,6 +6,7 @@
 #include "property_counter_factory.h"
 #include "triangle_counter.h"
 #include "quadrangle_counter.h"
+#include "connected_triples_counter.h"
 #include <assert.h>
 #include <functional>
 
@@ -21,6 +22,10 @@ static type_to_property_counter s_type_to_property_counter = {
     std::make_pair(QUADRANGLE_COUNT,
         [] (graph_types::graph& g) -> property_counter_base* {
             return new quadrangle_counter(g);
+        }),
+    std::make_pair(CONNECTED_TRIPLES_COUNT,
+        [] (graph_types::graph& g) -> property_counter_base* {
+            return new connected_triples_counter(g);
         })
 };
 

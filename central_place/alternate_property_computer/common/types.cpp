@@ -38,7 +38,8 @@ std::map<std::string, alternate_property_type> s_apname_to_aptype {
     std::make_pair("triangle_count", 
         alternate_property_type::TRIANGLE_COUNT),
     std::make_pair("quadrangle_count", 
-        alternate_property_type::QUADRANGLE_COUNT)
+        alternate_property_type::QUADRANGLE_COUNT), std::make_pair("connected_triples_count", 
+        alternate_property_type::CONNECTED_TRIPLES_COUNT)
 };
 
 alternate_property_type get_alternate_property_type_by_name(

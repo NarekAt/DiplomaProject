@@ -55,7 +55,8 @@ std::string get_randomization_name_by_type(
 enum alternate_property_type {
     TRIANGLE_COUNT,
     QUADRANGLE_COUNT,
-    INVALID_APT
+    INVALID_APT,
+    CONNECTED_TRIPLES_COUNT
 };
 
 /**
