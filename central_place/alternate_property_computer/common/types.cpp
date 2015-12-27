@@ -38,8 +38,11 @@ std::map<std::string, alternate_property_type> s_apname_to_aptype {
     std::make_pair("triangle_count", 
         alternate_property_type::TRIANGLE_COUNT),
     std::make_pair("quadrangle_count", 
-        alternate_property_type::QUADRANGLE_COUNT), std::make_pair("connected_triples_count", 
-        alternate_property_type::CONNECTED_TRIPLES_COUNT)
+        alternate_property_type::QUADRANGLE_COUNT),
+    std::make_pair("connected_triples_count",
+        alternate_property_type::CONNECTED_TRIPLES_COUNT),
+    std::make_pair("clustering_coefficent",
+        alternate_property_type::CLUSTERING_COEFFICENT)
 };
 
 alternate_property_type get_alternate_property_type_by_name(
@@ -54,9 +57,13 @@ alternate_property_type get_alternate_property_type_by_name(
 
 std::map<alternate_property_type, std::string> s_aptype_to_apname {
     std::make_pair(alternate_property_type::TRIANGLE_COUNT,
-        "triangle count"),
+            "triangle count"),
     std::make_pair(alternate_property_type::QUADRANGLE_COUNT,
-        "quadrangle count")
+            "quadrangle count"),
+    std::make_pair(alternate_property_type::CONNECTED_TRIPLES_COUNT,
+            "connected_triples_count"),
+    std::make_pair(alternate_property_type::CLUSTERING_COEFFICENT,
+            "clustering_coefficent")
 };
 
 std::string get_alternate_property_name_by_type(

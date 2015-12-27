@@ -7,6 +7,7 @@
 #include "triangle_counter.h"
 #include "quadrangle_counter.h"
 #include "connected_triples_counter.h"
+#include "clustering_coefficient_counter.h"
 #include <assert.h>
 #include <functional>
 
@@ -26,6 +27,10 @@ static type_to_property_counter s_type_to_property_counter = {
     std::make_pair(CONNECTED_TRIPLES_COUNT,
         [] (graph_types::graph& g) -> property_counter_base* {
             return new connected_triples_counter(g);
+        }),
+    std::make_pair(CLUSTERING_COEFFICENT,
+        [] (graph_types::graph& g) -> property_counter_base* {
+            return new clustering_coefficient_counter(g);
         })
 };
 
