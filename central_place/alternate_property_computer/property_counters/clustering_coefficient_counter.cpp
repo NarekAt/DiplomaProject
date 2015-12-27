@@ -36,15 +36,7 @@ alternate_property_type connected_triples_counter::get_type() const
 
 clustering_coefficient_counter::connected_triples_counter(
                                                      graph_types::graph& graph)
-: property_counter_base(graph)
+: property_counter_base(graph), connectedTriplesCounter(graph), triangleCounter(graph)
 {
-    connectedTriplesCounter = new connected_triples_counter(graph);
-    triangleCounter = new triangle_counter(graph);
     coefficient = 0;
-}
-
-clustering_coefficient_counter::~clustersing_coefficient_counter()
-{
-    delete connectedTriplesCounter;
-    delete triangleCounter;
 }
