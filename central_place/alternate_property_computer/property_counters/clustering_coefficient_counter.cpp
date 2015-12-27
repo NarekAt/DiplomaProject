@@ -42,3 +42,9 @@ clustering_coefficient_counter::connected_triples_counter(
     triangleCounter = new triangle_counter(graph);
     coefficient = 0;
 }
+
+clustering_coefficient_counter::~clustersing_coefficient_counter()
+{
+    delete connectedTriplesCounter;
+    delete triangleCounter;
+}

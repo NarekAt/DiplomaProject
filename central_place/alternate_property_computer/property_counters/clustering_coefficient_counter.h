@@ -49,6 +49,7 @@ public:
      * @param graph Graph for computing clustering coefficient.
      */
     clustering_coefficient_counter(graph_types::graph& graph);
+    ~clustering_coefficient_counter();
 private:
     connected_triples_counter* connectedTriplesCounter;
     triangle_counter* triangleCounter;
