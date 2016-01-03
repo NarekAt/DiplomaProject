@@ -1,4 +1,4 @@
-SUBDIRS=property_counters_test randomizers_test io_test ../../alternate_property_computer/graph_types ../../alternate_property_computer/common ../../alternate_property_computer/property_counters ../../alternate_property_computer/io test_main lib
+SUBDIRS=base_test property_counters_test randomizers_test io_test ../../alternate_property_computer/graph_types ../../alternate_property_computer/common ../../alternate_property_computer/property_counters ../../alternate_property_computer/io test_main lib
 
 .PHONY : compile clean
 
