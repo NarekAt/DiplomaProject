@@ -1,4 +1,4 @@
-SUBDIRS=exceptions graph_types common package main argument_parser mediator io property_counters randomizers task_managers lib
+SUBDIRS=exceptions graph_types common package main argument_parser mediator io base property_counters randomizers task_managers lib
 
 .PHONY : compile clean
 

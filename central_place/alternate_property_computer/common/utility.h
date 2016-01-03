@@ -20,6 +20,33 @@
     typedef type n4
 
 
+
+#define DECLARE_DELEGATING_CTOR0(TypeName, BaseTypeName)  \
+        TypeName() : BaseTypeName() {}
+
+#define DECLARE_DELEGATING_CTOR1(TypeName, BaseTypeName)  \
+        template<class T1>                                      \
+        explicit TypeName(const T1& t1)                         \
+            : BaseTypeName(t1) {}
+
+#define DECLARE_DELEGATING_CTOR2(TypeName, BaseTypeName)  \
+        template<class T1, class T2>                            \
+        TypeName(const T1& t1, const T2& t2)                    \
+            : BaseTypeName(t1, t2) {}
+
+#define DECLARE_DELEGATING_CTOR3(TypeName, BaseTypeName)  \
+        template<class T1, class T2, class T3>                  \
+        TypeName(const T1& t1, const T2& t2, const T3& t3)      \
+            : BaseTypeName(t1, t2, t3) {}
+
+#define DECLARE_DELEGATING_CTORS(TypeName, BaseTypeName)  \
+    DECLARE_DELEGATING_CTOR0(TypeName, BaseTypeName)      \
+    DECLARE_DELEGATING_CTOR1(TypeName, BaseTypeName)      \
+    DECLARE_DELEGATING_CTOR2(TypeName, BaseTypeName)      \
+    DECLARE_DELEGATING_CTOR3(TypeName, BaseTypeName)      \
+    /* end of multi-line macro */
+
+
 namespace utility
 {
 

@@ -57,6 +57,9 @@ private:
     bool strict_edge_exists(const vertex& v1, const vertex& v2) const;
 
 private:
+    virtual graph_size impl_degree(const vertex& v) const;
+
+private:
     virtual set_of_vertices impl_neighbors_set(const vertex& v) const;
     void collect_less_neighbors_set(const vertex& v, set_of_vertices& result) const;
 

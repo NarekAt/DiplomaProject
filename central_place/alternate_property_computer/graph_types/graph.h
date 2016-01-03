@@ -44,14 +44,20 @@ public:
     bool edge_exists(const edge& e) const;
 
     /**
+     * @brief Gets neighbors sequence of the given vertex.
+     * @param v Vertex for which neighbors are got.
+     */
+    graph_size degree(const vertex& v) const;
+
+    /**
      * @brief Gets neighbors set of the given vertex.
      * @param v Vertex for which neighbors are got.
      */
-    set_of_vertices neighbors_set(const vertex& v) const;
 
+    set_of_vertices neighbors_set(const vertex& v) const;
     /**
-     * @brief Gets neighbors sequence of the given vertex.
-     * @param v Vertex for which neighbors are got.
+     * @brief Gets degree for the given vertex
+     * @param v Vertex for which degree is got.
      */
     sequence_of_vertices neighbors_sequence(const vertex& v) const;
 
@@ -60,7 +66,7 @@ public:
      * @param t Vertex for which neighbor-edges are got.
      */
     set_of_edges neighbor_edges_set(const vertex& v) const;
-    
+
     /**
      * @brief Gets neighbor-edges sequence of the given vertex.
      * @param v Vertex for which neighbor-edges are got.
@@ -135,7 +141,7 @@ public:
      * @note Constructs empty graph.
      */
     graph();
-    
+
     /**
      * @brief Constructor. Creates empty graph with given storage core type.
      * @param t Storage core type.
@@ -196,7 +202,7 @@ private:
 
     template <class A>
     void load(A& ar, const unsigned version);
-    
+
     template <class A>
     void serialize(A& ar, const unsigned version);
     /// @}

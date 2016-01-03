@@ -1,6 +1,6 @@
 /**
  * @file property_counters/property_counter_base.h
- * @brief delcaration of property_counter_base class.
+ * @brief declaration of property_counter_base class.
  */
 
 #pragma once

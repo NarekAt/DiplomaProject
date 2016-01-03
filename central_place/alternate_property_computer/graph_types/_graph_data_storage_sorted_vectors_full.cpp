@@ -56,6 +56,19 @@ bool graph_data_storage_sorted_vectors_full::impl_edge_exists(
     return std::binary_search(neighbours.begin(), neighbours.end(), v2);
 }
 
+graph_size graph_data_storage_sorted_vectors_full::impl_degree(
+        const vertex& v) const
+{
+    const auto& neighbours = m_data[v];
+    unsigned count;
+    for (const auto& nbr : neighbours)
+    {
+        if (nbr)
+            ++count;
+    }
+    return count;
+}
+
 set_of_vertices graph_data_storage_sorted_vectors_full::impl_neighbors_set(
     const vertex& v) const
 {

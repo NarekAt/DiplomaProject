@@ -59,6 +59,19 @@ bool graph_data_storage_bitsets_full::impl_edge_exists(
     return neighbours[v2];
 }
 
+graph_size graph_data_storage_bitsets_full::impl_degree( const vertex& v) const
+{
+    const auto& neighbours = m_data[v];
+    unsigned count;
+
+    for (bitset_size_type i = 0; i < neighbours.size(); ++i) {
+        if (neighbours[i]) {
+            ++count;
+        }
+    }
+    return count;
+}
+
 set_of_vertices graph_data_storage_bitsets_full::impl_neighbors_set(
     const vertex& v) const
 {
@@ -172,7 +185,7 @@ void graph_data_storage_bitsets_full::one_way_add_edge(
     auto& v1_neighbours = m_data[v1];
     auto index = static_cast<size_t>(v2);
     assert(!v1_neighbours[index]);
-    v1_neighbours.set(index, true); 
+    v1_neighbours.set(index, true);
 }
 
 void graph_data_storage_bitsets_full::impl_remove_edge(
@@ -188,7 +201,7 @@ void graph_data_storage_bitsets_full::one_way_remove_edge(
     auto& v1_neighbours = m_data[v1];
     auto index = static_cast<size_t>(v2);
     assert(v1_neighbours[index]);
-    v1_neighbours.set(index, false); 
+    v1_neighbours.set(index, false);
 }
 
 void graph_data_storage_bitsets_full::impl_save(

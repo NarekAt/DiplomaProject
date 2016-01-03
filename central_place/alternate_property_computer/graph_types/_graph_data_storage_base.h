@@ -51,6 +51,12 @@ public:
     bool edge_exists(const edge& e) const;
 
     /**
+     * @brief Gets degree for the givend vertex
+     * @param v Vertex
+     */
+    graph_size degree(const vertex& v) const;
+
+    /**
      * @brief Gets neighbors set of the given vertex.
      * @param v Vertex for which neighbors are got.
      */
@@ -67,7 +73,7 @@ public:
      * @param t Vertex for which neighbor-edges are got.
      */
     set_of_edges neighbor_edges_set(const vertex& v) const;
-    
+
     /**
      * @brief Gets neighbor-edges sequence of the given vertex.
      * @param v Vertex for which neighbor-edges are got.
@@ -216,7 +222,7 @@ public:
      * @param ar Archive.
      */
     void load(boost::archive::binary_iarchive& ar);
-    
+
     /**
      * @brief Loads data from boost boost mpi packed archive.
      * @param ar Archive.
@@ -232,6 +238,7 @@ public:
 private:
     virtual graph_size impl_size() const = 0;
     virtual bool impl_edge_exists(const vertex& v1, const vertex& v2) const = 0;
+    virtual graph_size impl_degree(const vertex& v) const = 0;
     virtual set_of_vertices impl_neighbors_set(const vertex& v) const = 0;
     virtual sequence_of_vertices impl_neighbors_sequence(const vertex& v) const = 0;
     virtual set_of_edges impl_neighbor_edges_set(const vertex& v) const = 0;
