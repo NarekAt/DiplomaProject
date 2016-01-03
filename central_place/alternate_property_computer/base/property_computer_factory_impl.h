@@ -41,8 +41,8 @@ static type_to_property_computer s_type_to_property_computer = {
 
 template <class ResType>
 PropertyComputerBase<ResType>*
-property_computer_factory::get_counter(graph_types::graph& graph,
-                                      PropertyComputerType t)
+property_computer_factory::get_computer(graph_types::graph& graph,
+                                        PropertyComputerType t)
 {
     auto it = s_type_to_property_computer.find(t);
     assert(s_type_to_property_computer.end() != it);

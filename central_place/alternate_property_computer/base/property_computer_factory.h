@@ -15,7 +15,7 @@ class property_computer_factory
 {
 public:
     template <class ResType>
-    static PropertyComputerBase<ResType>* get_counter(graph_types::graph& graph,
+    static PropertyComputerBase<ResType>* get_computer(graph_types::graph& graph,
             PropertyComputerType t);
 };
 
