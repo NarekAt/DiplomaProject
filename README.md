@@ -1,5 +1,5 @@
 Master
 ======
 Advanced Graph Analyzer
-master thesis project repository
+(master thesis project repository)
 # Diploma Project
