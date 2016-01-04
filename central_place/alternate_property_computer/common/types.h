@@ -33,7 +33,7 @@ enum randomization_type {
 /**
  * @brief Gets randomization type value by name.
  * @param t_n Randomization type name.
- * @return Returns appropriate randomization type 
+ * @return Returns appropriate randomization type
  *         if it is valid, otherwise returns INVALID_RT enum value.
  */
 randomization_type get_randomization_type_by_name(
@@ -55,15 +55,15 @@ std::string get_randomization_name_by_type(
 enum alternate_property_type {
     TRIANGLE_COUNT,
     QUADRANGLE_COUNT,
-    INVALID_APT,
     CONNECTED_TRIPLES_COUNT,
-    CLUSTERING_COEFFICENT
+    CLUSTERING_COEFFICENT,
+    INVALID_APT
 };
 
 /**
  * @brief Gets alternate property type value by name.
  * @param t_n Alternate property type name.
- * @return Returns appropriate alternate property type 
+ * @return Returns appropriate alternate property type
  *         if it is valid, otherwise returns INVALID_APT enum value.
  */
 alternate_property_type get_alternate_property_type_by_name(
