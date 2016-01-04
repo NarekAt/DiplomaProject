@@ -20,29 +20,27 @@ public:
      * @brief Computes initial clustering coefficient of graph.
      */
     virtual unsigned compute_initial_count() const;
-    
+
 public:
     /**
      * @brief Gets clustering coefficient decrease value after removing edge.
      * @param e Edges to remove.
      */
-    virtual unsigned compute_decrease_after_remove(
-                                                   const graph_types::sequent_null_edges& e) const;
-    
+    virtual unsigned compute_decrease_after_remove(const graph_types::sequent_null_edges& e) const;
+
 public:
     /**
      * @brief Gets clustering coefficient count increase value after adding edge.
      * @param e Edges to add.
      */
-    virtual unsigned compute_increase_after_add(
-                                                const graph_types::sequent_null_edges& e) const;
-    
+    virtual unsigned compute_increase_after_add(const graph_types::sequent_null_edges& e) const;
+
 public:
     /**
-     * @brief Gets property counter type (CLUSTERING_COEFFICENT)
+     * @brief Gets property counter type (CLUSTERING_COEFFICIENT)
      */
     virtual alternate_property_type get_type() const;
-    
+
 public:
     /**
      * @brief Constructor
@@ -50,7 +48,6 @@ public:
      */
     clustering_coefficient_counter(graph_types::graph& graph);
 private:
-    connected_triples_counter connectedTriplesCounter;
-    triangle_counter triangleCounter;
-    unsigned coefficient;
+    const connected_triples_counter& connectedTriplesCounter_;
+    const triangle_counter& triangleCounter_;
 };

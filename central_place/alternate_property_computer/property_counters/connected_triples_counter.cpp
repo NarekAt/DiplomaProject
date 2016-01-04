@@ -35,9 +35,9 @@ unsigned connected_triples_counter::compute_decrease_after_remove(
         m_graph.remove_edge(vs, vt);
         const auto vs_n = m_graph.neighbors_sequence(vs);
         for (const auto& vsi : vs_n) {
-	  if (vsi != vt) {
+            if (vsi != vt) {
                 ++d_c;
-          }
+            }
         }
     }
     return d_c;

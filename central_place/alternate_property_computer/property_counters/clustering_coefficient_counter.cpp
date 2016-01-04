@@ -10,33 +10,38 @@
 #include "triangle_counter.h"
 #include "connected_triples_counter.h"
 
-unsigned clustering_coefficient_counter::compute_initial_count() const
+unsigned
+clustering_coefficient_counter::compute_initial_count() const
 {
-    coefficient = 3*triangleCounter.compute_initial_count()/connectedTriplesCounter.compute_initial_count();
-    return coefficient;
+    const unsigned trianglesCount = triangleCounter_.compute_initial_count();
+    const unsigned connTripleltsCount = connectedTriplesCounter_.compute_initial_count();
+
+    return (3 * trianglesCount) / connTripleltsCount;
 }
 
-unsigned clustering_coefficient_counter::compute_decrease_after_remove(
-                                                                  const graph_types::sequent_null_edges& e) const
+unsigned
+clustering_coefficient_counter::compute_decrease_after_remove(const graph_types::sequent_null_edges& e) const
 {
+    // TODO: need to clarify
     return 0;
 }
 
-unsigned clustering_coefficient_counter::compute_increase_after_add(
-                                                               const graph_types::sequent_null_edges& e) const
+unsigned
+clustering_coefficient_counter::compute_increase_after_add(const graph_types::sequent_null_edges& e) const
 {
-    // The same code for both: increase and decrease :)
+    // TODO: need to clarify
+    // The same code for both: increase and decrease
     return compute_decrease_after_remove(e);
 }
 
-alternate_property_type connected_triples_counter::get_type() const
+alternate_property_type
+clustering_coefficient_counter::get_type() const
 {
     return CLUSTERING_COEFFICENT;
 }
 
-clustering_coefficient_counter::connected_triples_counter(
-                                                     graph_types::graph& graph)
-: property_counter_base(graph), connectedTriplesCounter(graph), triangleCounter(graph)
-{
-    coefficient = 0;
-}
+clustering_coefficient_counter::clustering_coefficient_counter(graph_types::graph& graph)
+    : property_counter_base(graph)
+    , connectedTriplesCounter_(graph)
+    , triangleCounter_(graph)
+{}
