@@ -7,6 +7,8 @@
 
 #include "types.h"
 #include <fstream>
+#include "libxl.h"
+
 
 /**
  * TODO: 1) make base class for writers to
@@ -35,6 +37,8 @@ private:
      */
     bool prepare_output_directory();
 
+    void prepare_excel_file();
+
 public:
     /**
      * @brief Writes single result list.
@@ -44,6 +48,29 @@ public:
      * @param mu Mu of calculation.
      */
     void write_single_results_list(const single_results_list& r, double mu) const;
+
+    /**
+    * @brief Writes graph size and probability into the excel file
+    */
+    void write_graph_info();
+
+    /**
+    * @brief Writes Graph item property computation result path into the excel file
+    * @param result result vector
+    * @param type property type
+    */
+    template <class T>
+    void write_graph_item_property_result(const T& result,
+        const PropertyComputerType type);
+
+
+    /**
+    * @brief Add entry in excel file
+    * @param file_name name of the result file
+    * @param property_name name of the computed property
+    */
+    void addToSheet(const std::string& file_name,
+        const std::string& property_name);
 
     /// @name singleton management
     /// @{
@@ -81,7 +108,7 @@ public:
     /**
      * @brief Destructor.
      */
-    ~results_writer() = default;
+    ~results_writer();
 private:
     results_writer(const results_writer&) = delete;
     results_writer& operator=(const results_writer&) = delete;
@@ -89,6 +116,11 @@ private:
 
 private:
     std::string m_directory_name;
+    std::string m_excel_file_name;
+    libxl::Book* m_book;
+    libxl::Sheet* m_sheet;
+    unsigned m_next_row;
+
     bool m_is_writer_ready;
     unsigned m_vertex_count;
     double m_probability;

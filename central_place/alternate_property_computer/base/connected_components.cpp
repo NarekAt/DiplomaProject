@@ -8,10 +8,12 @@
 namespace Base
 {
 
+typedef std::lock_guard<std::mutex> Lock;
+
 void
 ConnectedComponents::computeImpl()
 {
-    std::atomic<bool> changed (true);
+    std::atomic_bool changed (true);
 
     MT::parallel_for(0, results_.size() - 1, [&](unsigned index){
             results_[index] = index; });
@@ -25,7 +27,11 @@ ConnectedComponents::computeImpl()
                 const graph_types::vertex second = results_[edges[index].second];
                 if (first < second)
                 {
-                    results_[second] = first;
+                    // critical section
+                    {
+                        Lock l(mutex_);
+                        results_[second] = first;
+                    }
                     changed = true;
                 }
         });

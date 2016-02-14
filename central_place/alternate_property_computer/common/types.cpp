@@ -30,14 +30,14 @@ std::string get_randomization_name_by_type(
     randomization_type t)
 {
     auto r_it = s_rtype_to_rname.find(t);
-    assert(s_rtype_to_rname.end() != r_it); 
+    assert(s_rtype_to_rname.end() != r_it);
     return r_it->second;
 }
 
 std::map<std::string, alternate_property_type> s_apname_to_aptype {
-    std::make_pair("triangle_count", 
+    std::make_pair("triangle_count",
         alternate_property_type::TRIANGLE_COUNT),
-    std::make_pair("quadrangle_count", 
+    std::make_pair("quadrangle_count",
         alternate_property_type::QUADRANGLE_COUNT),
     std::make_pair("connected_triples_count",
         alternate_property_type::CONNECTED_TRIPLES_COUNT),
@@ -53,6 +53,30 @@ alternate_property_type get_alternate_property_type_by_name(
         return ap_it->second;
     }
     return alternate_property_type::INVALID_APT;
+}
+
+std::map<std::string, PropertyComputerType> s_giname_to_gitype {
+    std::make_pair("connected_components",
+        PropertyComputerType::CONNECTED_COMPONENTS),
+    std::make_pair("shortest_path",
+        PropertyComputerType::SHORTEST_PATH),
+    std::make_pair("betweenness_centrality",
+        PropertyComputerType::BETWEENNESS_CENTRALITY),
+    std::make_pair("eigen_values",
+        PropertyComputerType::EIGEN_VALUES),
+    std::make_pair("degree",
+        PropertyComputerType::DEGREE)
+};
+
+PropertyComputerType get_graph_item_property_type_by_name(
+    const std::string& t_n)
+{
+    auto gi_it = s_giname_to_gitype.find(t_n);
+
+    if (s_giname_to_gitype.end() != gi_it) {
+        return gi_it->second;
+    }
+    return  PropertyComputerType::INVALID_PCT;
 }
 
 std::map<alternate_property_type, std::string> s_aptype_to_apname {
@@ -72,4 +96,25 @@ std::string get_alternate_property_name_by_type(
     auto ap_it = s_aptype_to_apname.find(t);
     assert(s_aptype_to_apname.end() != ap_it);
     return ap_it->second;
+}
+
+std::map<PropertyComputerType, std::string> s_gritype_to_griname {
+    std::make_pair(PropertyComputerType::CONNECTED_COMPONENTS,
+            "connected_components"),
+    std::make_pair(PropertyComputerType::SHORTEST_PATH,
+            "shortest_path"),
+    std::make_pair(PropertyComputerType::BETWEENNESS_CENTRALITY,
+            "betweenness_centrality"),
+    std::make_pair(PropertyComputerType::EIGEN_VALUES,
+            "eigen_values"),
+    std::make_pair(PropertyComputerType::DEGREE,
+            "degree")
+};
+
+std::string get_graph_item_property_name_by_type(
+    PropertyComputerType t)
+{
+    auto sp_it = s_gritype_to_griname.find(t);
+    assert(s_gritype_to_griname.end() != sp_it);
+    return sp_it->second;
 }

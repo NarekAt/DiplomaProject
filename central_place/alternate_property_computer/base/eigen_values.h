@@ -10,7 +10,8 @@
 namespace Base
 {
 
-class EigenValues : public PropertyComputerBase<std::vector<std::complex<double> > >
+class EigenValues :
+    public PropertyComputerBase<std::vector<std::complex<double> > >
 {
 public:
     typedef PropertyComputerBase<std::vector<std::complex<double> > > BaseType;

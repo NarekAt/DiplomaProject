@@ -80,6 +80,17 @@ arg_name_to_value_map argument_parser::parse_and_get_args(
         } else {
             // TODO: throw exception
         }
+        if (1 == vm.count("graph_item_property_type")) {
+            auto ip_t = get_graph_item_property_type_by_name(
+                vm["graph_item_property_type"].as<std::string>());
+            a_n_v.insert(std::make_pair(
+                std::string("graph_item_property_type"), ip_t));
+        } else if (0 == vm.count("graph_item_property_type")) {
+            a_n_v.insert(std::make_pair(
+                std::string("graph_item_property_type"), PropertyComputerType::INVALID_PCT));
+        } else {
+            // TODO: throw exception
+        }
         boost::program_options::notify(vm);
     } catch (const boost::program_options::error& e) {
         // TODO: Change cout to log.
@@ -113,19 +124,24 @@ argument_parser::argument_parser(std::ofstream& logger) :
     m_logger(logger)
 {
     m_options_description.add_options()
-        ("graph_file,g", 
+        ("graph_file,g",
             boost::program_options::value<std::string>()->required(),
             "File which contains graph")
-        ("mu_file,m", 
-            boost::program_options::value<std::string>()->required(), 
+        ("mu_file,m",
+            boost::program_options::value<std::string>()->required(),
             "File which contains mu sequence or mu range with step")
-        ("step_count,c", 
-            boost::program_options::value<unsigned>()->required(), 
+        ("step_count,c",
+            boost::program_options::value<unsigned>()->required(),
             "Step count per generation.")
-        ("randomization_type,r_t", 
+        ("randomization_type,r_t",
             boost::program_options::value<std::string>(),
             "Randomization type.")
         ("alternate_property_type,a_p_t",
             boost::program_options::value<std::string>(),
-            "Alternate_property_type: by default triangle_count");
+            "Alternate_property_type: by default triangle_count")
+        ("graph_item_property_type,g_i_p_t",
+            boost::program_options::value<std::string>(),
+            "Graph item (node/edge) property type: by default none");
+
+    // TODO: remove triangle_count by default
 }

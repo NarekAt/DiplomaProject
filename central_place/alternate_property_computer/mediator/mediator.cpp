@@ -50,6 +50,17 @@ void mediator::init(const arg_name_to_value_map& a_n_v)
         m_alternate_property_type = boost::any_cast<
             alternate_property_type>(apt_it->second);
         assert(INVALID_APT != m_alternate_property_type);
+        auto gi_pit = a_n_v.find("graph_item_property_type");
+        if (gi_pit != a_n_v.end())
+        {
+            m_graph_item_property_type = boost::any_cast<
+            PropertyComputerType>(gi_pit->second);
+        }
+        else
+        {
+            m_graph_item_property_type = PropertyComputerType::INVALID_PCT;
+        }
+
         results_writer::get_instance().prapare_writer(m_vertex_count, m_probability);
     } catch (const boost::bad_any_cast&) {
         assert(!"bad any cast");

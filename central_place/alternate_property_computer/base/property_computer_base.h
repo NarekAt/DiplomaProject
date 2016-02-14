@@ -7,18 +7,10 @@
 #define INCLUDED__PROPERTY_COMPUTER_BASE_H
 
 #include "graph.h"
+#include "types.h"
 
 namespace Base
 {
-
-enum PropertyComputerType
-{
-    CONNECTED_COMPONENTS,
-    SHORTEST_PATH,
-    BETWEENNESS_CENTRALITY,
-    EIGEN_VALUES,
-    DEGREE
-};
 
 template <class T>
 class PropertyComputerBase

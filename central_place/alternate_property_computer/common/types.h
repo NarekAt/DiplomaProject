@@ -30,6 +30,15 @@ enum randomization_type {
     INVALID_RT
 };
 
+enum PropertyComputerType
+{
+    CONNECTED_COMPONENTS,
+    SHORTEST_PATH,
+    BETWEENNESS_CENTRALITY,
+    EIGEN_VALUES,
+    DEGREE,
+    INVALID_PCT
+};
 /**
  * @brief Gets randomization type value by name.
  * @param t_n Randomization type name.
@@ -70,11 +79,20 @@ alternate_property_type get_alternate_property_type_by_name(
     const std::string& t_n);
 
 /**
+ *
+ */
+PropertyComputerType get_graph_item_property_type_by_name(
+    const std::string& t_n);
+
+/**
  * @brief Gets alternate property type name by value.
  * @param t Aternate property type.
  */
 std::string get_alternate_property_name_by_type(
     alternate_property_type t);
+
+std::string get_graph_item_property_name_by_type(
+    PropertyComputerType t);
 
 static int s_status_step = 500;
 

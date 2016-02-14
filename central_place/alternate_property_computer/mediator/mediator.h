@@ -62,6 +62,7 @@ private:
     unsigned m_step_count;
     randomization_type m_randomization_type;
     alternate_property_type m_alternate_property_type;
+    PropertyComputerType m_graph_item_property_type;
     boost::mpi::communicator m_world;
     unsigned m_vertex_count;
     double m_probability;

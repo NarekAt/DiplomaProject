@@ -22,6 +22,7 @@ class StepExecutor
     typedef std::stack<vertex>              ReachableVertices;
 
     typedef Base::BC::ResultType            ResultType;
+    typedef std::lock_guard<std::mutex>     Lock;
 
     struct StepInfo
     {
@@ -73,16 +74,20 @@ public:
                     auto& distance = info_.d_[w];
                     const auto& possibleDistance = info_.d_[v] + 1;
                     // w found for the first time?
-                    if (distance < 0)
+                    // critical section
                     {
-                        verticesToVisit.push(w);
-                        distance = possibleDistance;
-                    }
-                    // shortest path to w via v?
-                    if (distance == possibleDistance)
-                    {
-                        info_.spc_[w] += info_.spc_[v];
-                        info_.vpc_[w].push_back(v);
+                        Lock l (mutex_);
+                        if (distance < 0)
+                        {
+                            verticesToVisit.push(w);
+                            distance = possibleDistance;
+                        }
+                        // shortest path to w via v?
+                        if (distance == possibleDistance)
+                        {
+                            info_.spc_[w] += info_.spc_[v];
+                            info_.vpc_[w].push_back(v);
+                        }
                     }
             });
         }
@@ -106,6 +111,7 @@ public:
 private:
     ResultType& res_;
     const graph_types::graph& g_;
+    std::mutex mutex_;
 
     StepInfo info_;
 };

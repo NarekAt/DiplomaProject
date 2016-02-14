@@ -7,6 +7,7 @@
 
 // related with multithreading
 #include <future>
+#include <mutex>
 
 namespace
 {
@@ -73,6 +74,8 @@ private: // data
     const double maxDistance_;
     DetailedArrivalInfo currentArrival_;
     const bool reportAllCompetingArrivals_;
+
+    std::mutex mutex_;
 
     typedef std::map<graph_types::edge, double> EdgeCountProperty;
 
@@ -162,6 +165,9 @@ BFSIterator::process(EdgeIterator first, EdgeIterator last)
 {
     typedef graph_types::vertex vertex;
     typedef graph_types::edge edge;
+    typedef std::unique_lock<std::mutex> Lock;
+
+    Lock l (mutex_, std::defer_lock);
 
     const vertex currentVertex = currentArrival_.m_vertex;
     const vertex currentVertexDistance = currentArrival_.m_distance;
@@ -179,8 +185,11 @@ BFSIterator::process(EdgeIterator first, EdgeIterator last)
         if ( ret == visitedVertices_.end() || (reportAllCompetingArrivals_ && outVertex == currentVertex) )
         {
             const double newDistance = currentVertexDistance + edgeLength;
+            // critical section
+            l.lock();
             if ( newDistance <= maxDistance_ )
                 wave_.push(ArrivalInfo(outVertex, edge, currentArrival_.m_source, newDistance));
+            l.unlock();
         }
     }
 }

@@ -13,10 +13,13 @@
 
 #include <vector>
 
+#include <mutex>
+
 namespace Base
 {
 
-class ConnectedComponents : public PropertyComputerBase<std::vector<unsigned> >
+class ConnectedComponents :
+    public PropertyComputerBase<std::vector<unsigned> >
 {
 public:
     typedef PropertyComputerBase<std::vector<unsigned> > BaseType;
@@ -30,6 +33,9 @@ protected:
     virtual PropertyComputerType typeImpl() const;
 
     virtual ResultType getDistributionImpl() const;
+
+private:
+    std::mutex mutex_;
 };
 
 } // namespace Base

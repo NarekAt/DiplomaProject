@@ -19,9 +19,11 @@ void results_writer::prapare_writer(unsigned n, double p)
     assert(!m_is_writer_ready);
     if (!prepare_output_directory()) {
         // TODO: throw exception.
-        return; // dont forget to remove, 
+        return; // dont forget to remove,
                 // after throw part will be implemented.
     }
+
+    prepare_excel_file();
     m_is_writer_ready = true;
 }
 
@@ -58,7 +60,7 @@ bool results_writer::prepare_output_directory()
     if (!if_dir_dont_exists_then_create(m_directory_name)) {
         return false;
     }
-    m_directory_name += std::string("/") + 
+    m_directory_name += std::string("/") +
         "alternate_property_computer_results";
     if (!if_dir_dont_exists_then_create(m_directory_name)) {
         return false;
@@ -72,11 +74,84 @@ bool results_writer::prepare_output_directory()
     return true;
 }
 
+void results_writer::prepare_excel_file()
+{
+    assert(!m_is_writer_ready);
+    assert(m_directory_name == "global_results");
+
+    m_excel_file_name = m_directory_name + "/" + "graph_evaluation_results" + ".xlsx";
+    // TODO: provide an error handling
+
+    std::ofstream output;
+    output.open(m_excel_file_name);
+    if (!output.is_open()) {
+        // TODO: write error message.
+        return;
+    }
+
+    m_book = xlCreateBook();
+    assert(m_book);
+
+    m_sheet = m_book->addSheet("evaluation");
+    write_graph_info();
+}
+
+void results_writer::write_graph_info()
+{
+    m_sheet->writeStr(1, 1, "Graph Size");
+    m_sheet->writeNum(2, 1, m_vertex_count);
+
+    m_sheet->writeStr(1, 2, "Probability");
+    m_sheet->writeNum(2, 2, m_probability);
+
+    m_next_row = 3;
+}
+
+void results_writer::addToSheet(const std::string& file_name, const std::string& property_name)
+{
+    assert(m_sheet);
+    m_sheet->writeStr(1, m_next_row, property_name.c_str());
+    m_sheet->writeStr(2, m_next_row, file_name.c_str());
+
+    ++m_next_row;
+}
+
+template <class T>
+void results_writer::write_graph_item_property_result(const T& result, const PropertyComputerType type)
+{
+    const std::string typeStr = get_graph_item_property_name_by_type(type);
+    std::string file_name = m_directory_name + "/" +
+        "graph" + "N" + "_" + std::to_string(result.size()) + "_" + typeStr + ".txt";
+
+    auto f = boost::filesystem::status(file_name);
+    if (boost::filesystem::exists(f)) {
+        if (!boost::filesystem::is_regular_file(f)) {
+            // TODO: write error message.
+            return;
+        }
+        // TODO: write info message.
+        return;
+    }
+    std::ofstream output;
+    output.open(file_name);
+    if (!output.is_open()) {
+        // TODO: write error message.
+        return;
+    }
+
+    for (unsigned int i = 0; i != result.size(); ++i)
+    {
+        output << i << " " << result[i] << std::endl;
+    }
+
+    addToSheet(file_name, typeStr);
+}
+
 void results_writer::write_single_results_list(
     const single_results_list& r, double mu) const
 {
     assert(m_is_writer_ready);
-    std::string file_name = m_directory_name + "/" + 
+    std::string file_name = m_directory_name + "/" +
         "mu" + std::to_string(mu) + ".txt";
     auto f = boost::filesystem::status(file_name);
     if (boost::filesystem::exists(f)) {
@@ -126,3 +201,8 @@ results_writer::results_writer(std::ofstream& logger)
     : m_is_writer_ready(false),
     m_logger(logger)
 {}
+
+results_writer::~results_writer()
+{
+    m_book->release();
+}
