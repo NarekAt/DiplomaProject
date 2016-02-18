@@ -5,9 +5,13 @@
 
 #include "mediator.h"
 #include "erdos_renyi_reader.h"
+
+//task managers
 #include "single_process_task_manager.h"
 #include "main_process_task_manager.h"
 #include "secondary_process_task_manager.h"
+#include "graph_item_property_task_manager.h"
+
 #include "results_writer.h"
 #include <iostream>
 #include <ctime>
@@ -28,38 +32,36 @@ void mediator::init(const arg_name_to_value_map& a_n_v)
     }
     try {
         erdos_renyi_reader r;
-        auto mu_it = a_n_v.find("mu_file");
-        assert(a_n_v.end() != mu_it);
-        r.get_mus_from_file(
-            boost::any_cast<std::string>(mu_it->second), m_mu_list);
+
         auto gr_it = a_n_v.find("graph_file");
         assert(a_n_v.end() != gr_it);
         r.get_graph_and_properties_from_file(
             boost::any_cast<std::string>(gr_it->second),
             m_graph, m_vertex_count, m_probability);
-        auto sc_it = a_n_v.find("step_count");
-        assert(a_n_v.end() != sc_it);
-        m_step_count = boost::any_cast<unsigned>(sc_it->second);
-        auto rt_it = a_n_v.find("randomization_type");
-        assert(a_n_v.end() != rt_it);
-        m_randomization_type = boost::any_cast<randomization_type>(
-            rt_it->second);
-        assert(INVALID_RT != m_randomization_type);
+
         auto apt_it = a_n_v.find("alternate_property_type");
         assert(a_n_v.end() != apt_it);
         m_alternate_property_type = boost::any_cast<
             alternate_property_type>(apt_it->second);
         assert(INVALID_APT != m_alternate_property_type);
-        auto gi_pit = a_n_v.find("graph_item_property_type");
-        if (gi_pit != a_n_v.end())
-        {
-            m_graph_item_property_type = boost::any_cast<
-            PropertyComputerType>(gi_pit->second);
-        }
-        else
-        {
-            m_graph_item_property_type = PropertyComputerType::INVALID_PCT;
-        }
+
+        if (is_graph_item_related_property(m_alternate_property_type))
+            return;
+
+        auto mu_it = a_n_v.find("mu_file");
+        assert(a_n_v.end() != mu_it);
+        r.get_mus_from_file(
+            boost::any_cast<std::string>(mu_it->second), m_mu_list);
+        
+        auto sc_it = a_n_v.find("step_count");
+        assert(a_n_v.end() != sc_it);
+        m_step_count = boost::any_cast<unsigned>(sc_it->second);
+
+        auto rt_it = a_n_v.find("randomization_type");
+        assert(a_n_v.end() != rt_it);
+        m_randomization_type = boost::any_cast<randomization_type>(
+            rt_it->second);
+        assert(INVALID_RT != m_randomization_type);
 
         results_writer::get_instance().prapare_writer(m_vertex_count, m_probability);
     } catch (const boost::bad_any_cast&) {
@@ -70,6 +72,12 @@ void mediator::init(const arg_name_to_value_map& a_n_v)
 void mediator::run(boost::mpi::communicator& world)
 {
     assert(m_inited);
+    if(is_graph_item_related_property(m_alternate_property_type)) {
+        graph_item_property_task_manager t_m;
+        run_task_manager_and_send_to_output(t_m);
+        m_logger.close();
+    }
+
     if (1 == world.size()) {
         single_process_task_manager t_m(world, m_logger);
         run_task_manager_and_send_to_output(t_m);
@@ -89,6 +97,12 @@ void mediator::run(boost::mpi::communicator& world)
 void mediator::write_results(const single_results_list& s_r, double mu) const
 {
     results_writer::get_instance().write_single_results_list(s_r, mu);
+}
+
+template<class T>
+void mediator::write_results(const T& results, const alternate_property_type apt) const
+{
+    results_writer::get_instance().write_graph_item_property_result(results, apt);
 }
 
 void mediator::run_task_manager_and_send_to_output(

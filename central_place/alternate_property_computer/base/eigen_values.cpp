@@ -45,7 +45,7 @@ EigenValues::computeImpl()
     }
 }
 
-PropertyComputerType
+alternate_property_type
 EigenValues::typeImpl() const
 {
     return EIGEN_VALUES;

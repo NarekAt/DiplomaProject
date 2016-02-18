@@ -37,7 +37,7 @@ public: // functions
         return results_;
     }
 
-    PropertyComputerType type() const
+    alternate_property_type type() const
     {
         return typeImpl();
     }
@@ -50,7 +50,7 @@ public:
 
 private: // virtual impl functions
     virtual void computeImpl() = 0;
-    virtual PropertyComputerType typeImpl() const = 0;
+    virtual alternate_property_type typeImpl() const = 0;
     virtual ResultType getDistributionImpl() const = 0;
 
 protected: // data

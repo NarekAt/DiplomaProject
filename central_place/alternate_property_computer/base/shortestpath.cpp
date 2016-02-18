@@ -27,7 +27,7 @@ ShortestPath::computeImpl()
     }
 }
 
-PropertyComputerType
+alternate_property_type
 ShortestPath::typeImpl() const
 {
     return SHORTEST_PATH;

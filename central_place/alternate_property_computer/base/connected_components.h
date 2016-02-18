@@ -30,7 +30,7 @@ public:
 protected:
     virtual void computeImpl();
 
-    virtual PropertyComputerType typeImpl() const;
+    virtual alternate_property_type typeImpl() const;
 
     virtual ResultType getDistributionImpl() const;
 

@@ -6,6 +6,11 @@
 #include "types.h"
 #include <assert.h>
 
+bool is_graph_item_related_property(const alternate_property_type t)
+{
+    return t > 3 && t != 9;
+}
+
 std::map<std::string, randomization_type> s_rname_to_rtype {
     std::make_pair("fixed_degree", randomization_type::FIXED_DEGREE),
     std::make_pair("random_switch", randomization_type::RANDOM_SWITCH)
@@ -42,7 +47,17 @@ std::map<std::string, alternate_property_type> s_apname_to_aptype {
     std::make_pair("connected_triples_count",
         alternate_property_type::CONNECTED_TRIPLES_COUNT),
     std::make_pair("clustering_coefficent",
-        alternate_property_type::CLUSTERING_COEFFICENT)
+        alternate_property_type::CLUSTERING_COEFFICENT),
+    std::make_pair("connected_components",
+        alternate_property_type::CONNECTED_COMPONENTS),
+    std::make_pair("shortest_path",
+        alternate_property_type::SHORTEST_PATH),
+    std::make_pair("betweenness_centrality",
+        alternate_property_type::BETWEENNESS_CENTRALITY),
+    std::make_pair("eigen_values",
+        alternate_property_type::EIGEN_VALUES),
+    std::make_pair("degree",
+        alternate_property_type::DEGREE)
 };
 
 alternate_property_type get_alternate_property_type_by_name(
@@ -55,30 +70,6 @@ alternate_property_type get_alternate_property_type_by_name(
     return alternate_property_type::INVALID_APT;
 }
 
-std::map<std::string, PropertyComputerType> s_giname_to_gitype {
-    std::make_pair("connected_components",
-        PropertyComputerType::CONNECTED_COMPONENTS),
-    std::make_pair("shortest_path",
-        PropertyComputerType::SHORTEST_PATH),
-    std::make_pair("betweenness_centrality",
-        PropertyComputerType::BETWEENNESS_CENTRALITY),
-    std::make_pair("eigen_values",
-        PropertyComputerType::EIGEN_VALUES),
-    std::make_pair("degree",
-        PropertyComputerType::DEGREE)
-};
-
-PropertyComputerType get_graph_item_property_type_by_name(
-    const std::string& t_n)
-{
-    auto gi_it = s_giname_to_gitype.find(t_n);
-
-    if (s_giname_to_gitype.end() != gi_it) {
-        return gi_it->second;
-    }
-    return  PropertyComputerType::INVALID_PCT;
-}
-
 std::map<alternate_property_type, std::string> s_aptype_to_apname {
     std::make_pair(alternate_property_type::TRIANGLE_COUNT,
             "triangle count"),
@@ -87,7 +78,17 @@ std::map<alternate_property_type, std::string> s_aptype_to_apname {
     std::make_pair(alternate_property_type::CONNECTED_TRIPLES_COUNT,
             "connected_triples_count"),
     std::make_pair(alternate_property_type::CLUSTERING_COEFFICENT,
-            "clustering_coefficent")
+            "clustering_coefficent"),
+    std::make_pair(alternate_property_type::CONNECTED_COMPONENTS,
+            "connected_components"),
+    std::make_pair(alternate_property_type::SHORTEST_PATH,
+            "shortest_path"),
+    std::make_pair(alternate_property_type::BETWEENNESS_CENTRALITY,
+            "betweenness_centrality"),
+    std::make_pair(alternate_property_type::EIGEN_VALUES,
+            "eigen_values"),
+    std::make_pair(alternate_property_type::DEGREE,
+            "degree")
 };
 
 std::string get_alternate_property_name_by_type(
@@ -96,25 +97,4 @@ std::string get_alternate_property_name_by_type(
     auto ap_it = s_aptype_to_apname.find(t);
     assert(s_aptype_to_apname.end() != ap_it);
     return ap_it->second;
-}
-
-std::map<PropertyComputerType, std::string> s_gritype_to_griname {
-    std::make_pair(PropertyComputerType::CONNECTED_COMPONENTS,
-            "connected_components"),
-    std::make_pair(PropertyComputerType::SHORTEST_PATH,
-            "shortest_path"),
-    std::make_pair(PropertyComputerType::BETWEENNESS_CENTRALITY,
-            "betweenness_centrality"),
-    std::make_pair(PropertyComputerType::EIGEN_VALUES,
-            "eigen_values"),
-    std::make_pair(PropertyComputerType::DEGREE,
-            "degree")
-};
-
-std::string get_graph_item_property_name_by_type(
-    PropertyComputerType t)
-{
-    auto sp_it = s_gritype_to_griname.find(t);
-    assert(s_gritype_to_griname.end() != sp_it);
-    return sp_it->second;
 }

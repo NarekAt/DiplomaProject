@@ -8,6 +8,8 @@
 #include "types.h"
 #include "graph_types.h"
 #include "graph.h"
+#include "igraph_task_manager.h"
+
 #include <boost/mpi.hpp>
 #include <fstream>
 
@@ -18,7 +20,7 @@ class property_counter_base;
  * @class task_manager_base
  * @brief base class for task managers.
  */
-class task_manager_base
+class task_manager_base : public igraph_task_manager
 {
 public:
     /**
@@ -32,12 +34,6 @@ public:
     void init(const graph_types::graph& g,
         const mu_list& m, unsigned s_c, const randomization_type r,
         const alternate_property_type p);
-
-public:
-    /**
-     * @brief Runs task manager
-     */
-    virtual void run() = 0;
 
 private:
     /**
@@ -91,7 +87,6 @@ protected:
 protected:
     bool m_inited;
     boost::mpi::communicator& m_world;
-    graph_types::graph m_initial_graph;
     graph_types::graph m_current_graph;
     mu_list m_mu_list;
     unsigned m_step_count;
@@ -100,14 +95,12 @@ protected:
     unsigned m_pass_count; 
     randomization_type m_randomizator_type;
     randomizator_base* m_randomizator;
-    alternate_property_type m_alternate_property_type;
     property_counter_base* m_counter;
     unsigned m_initial_property_count;
     unsigned m_current_property_count;
     graph_types::sequent_null_edges m_initial_non_existing_edges;
     graph_types::sequent_null_edges m_current_non_existing_edges;
     calculation_results m_results;
-    std::ofstream& m_logger;
 
 public:
     /**

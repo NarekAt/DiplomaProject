@@ -14,7 +14,7 @@ DegreeComputer::computeImpl()
             results_[index] = graph_.degree(index); });
 }
 
-PropertyComputerType
+alternate_property_type
 DegreeComputer::typeImpl() const
 {
     return DEGREE;

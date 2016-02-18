@@ -13,7 +13,7 @@
 namespace Base
 {
 
-using type_to_property_computer = std::map<PropertyComputerType, std::function<
+using type_to_property_computer = std::map<alternate_property_type, std::function<
         boost::any (graph_types::graph& g)> >;
 
 static type_to_property_computer s_type_to_property_computer = {
@@ -42,7 +42,7 @@ static type_to_property_computer s_type_to_property_computer = {
 template <class ResType>
 PropertyComputerBase<ResType>*
 property_computer_factory::get_computer(graph_types::graph& graph,
-                                        PropertyComputerType t)
+                                        alternate_property_type t)
 {
     auto it = s_type_to_property_computer.find(t);
     assert(s_type_to_property_computer.end() != it);

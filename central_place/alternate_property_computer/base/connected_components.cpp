@@ -47,7 +47,7 @@ ConnectedComponents::computeImpl()
     }
 }
 
-PropertyComputerType
+alternate_property_type
 ConnectedComponents::typeImpl() const
 {
     return CONNECTED_COMPONENTS;

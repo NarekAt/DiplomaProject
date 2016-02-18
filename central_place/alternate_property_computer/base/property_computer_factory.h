@@ -16,7 +16,7 @@ class property_computer_factory
 public:
     template <class ResType>
     static PropertyComputerBase<ResType>* get_computer(graph_types::graph& graph,
-            PropertyComputerType t);
+            alternate_property_type t);
 };
 
 }

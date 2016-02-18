@@ -117,9 +117,9 @@ void results_writer::addToSheet(const std::string& file_name, const std::string&
 }
 
 template <class T>
-void results_writer::write_graph_item_property_result(const T& result, const PropertyComputerType type)
+void results_writer::write_graph_item_property_result(const T& result, const alternate_property_type type)
 {
-    const std::string typeStr = get_graph_item_property_name_by_type(type);
+    const std::string typeStr = get_alternate_property_name_by_type(type);
     std::string file_name = m_directory_name + "/" +
         "graph" + "N" + "_" + std::to_string(result.size()) + "_" + typeStr + ".txt";
 

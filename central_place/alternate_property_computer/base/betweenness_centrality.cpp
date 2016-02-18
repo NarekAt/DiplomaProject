@@ -134,7 +134,7 @@ BC::computeImpl()
     });
 }
 
-PropertyComputerType
+alternate_property_type
 BC::typeImpl() const
 {
     return BETWEENNESS_CENTRALITY;

@@ -61,8 +61,7 @@ public:
     */
     template <class T>
     void write_graph_item_property_result(const T& result,
-        const PropertyComputerType type);
-
+        const alternate_property_type type);
 
     /**
     * @brief Add entry in excel file

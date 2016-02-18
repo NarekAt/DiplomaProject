@@ -180,14 +180,13 @@ void task_manager_base::calculate_initial_alternate_property_count()
 
 task_manager_base::task_manager_base(boost::mpi::communicator& world,
     std::ofstream& logger) :
+    igraph_task_manager(graph_types::storage_core_type::BITSETS_FULL, INVALID_APT, logger), 
     m_inited(false),
     m_world(world),
     m_pass_count(10),
     m_randomizator(nullptr),
     m_counter(nullptr),
-    m_initial_graph(graph_types::storage_core_type::BITSETS_FULL),
-    m_current_graph(graph_types::storage_core_type::BITSETS_FULL),
-    m_logger(logger)
+    m_current_graph(graph_types::storage_core_type::BITSETS_FULL)
 {}
 
 task_manager_base::~task_manager_base()
