@@ -4,7 +4,6 @@
  */
 
 #include "results_writer.h"
-#include <boost/filesystem.hpp>
 #include <iostream>
 #include <fstream>
 #include <ctime>
@@ -77,17 +76,9 @@ bool results_writer::prepare_output_directory()
 void results_writer::prepare_excel_file()
 {
     assert(!m_is_writer_ready);
-    assert(m_directory_name == "global_results");
+    m_directory_name == "global_results";
 
     m_excel_file_name = m_directory_name + "/" + "graph_evaluation_results" + ".xlsx";
-    // TODO: provide an error handling
-
-    std::ofstream output;
-    output.open(m_excel_file_name);
-    if (!output.is_open()) {
-        // TODO: write error message.
-        return;
-    }
 
     m_book = xlCreateBook();
     assert(m_book);
@@ -114,37 +105,6 @@ void results_writer::addToSheet(const std::string& file_name, const std::string&
     m_sheet->writeStr(2, m_next_row, file_name.c_str());
 
     ++m_next_row;
-}
-
-template <class T>
-void results_writer::write_graph_item_property_result(const T& result, const alternate_property_type type)
-{
-    const std::string typeStr = get_alternate_property_name_by_type(type);
-    std::string file_name = m_directory_name + "/" +
-        "graph" + "N" + "_" + std::to_string(result.size()) + "_" + typeStr + ".txt";
-
-    auto f = boost::filesystem::status(file_name);
-    if (boost::filesystem::exists(f)) {
-        if (!boost::filesystem::is_regular_file(f)) {
-            // TODO: write error message.
-            return;
-        }
-        // TODO: write info message.
-        return;
-    }
-    std::ofstream output;
-    output.open(file_name);
-    if (!output.is_open()) {
-        // TODO: write error message.
-        return;
-    }
-
-    for (unsigned int i = 0; i != result.size(); ++i)
-    {
-        output << i << " " << result[i] << std::endl;
-    }
-
-    addToSheet(file_name, typeStr);
 }
 
 void results_writer::write_single_results_list(
@@ -204,5 +164,6 @@ results_writer::results_writer(std::ofstream& logger)
 
 results_writer::~results_writer()
 {
+    m_book->save(m_excel_file_name.c_str());
     m_book->release();
 }

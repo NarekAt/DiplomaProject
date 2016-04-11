@@ -12,7 +12,6 @@
 #include "secondary_process_task_manager.h"
 #include "graph_item_property_task_manager.h"
 
-#include "results_writer.h"
 #include <iostream>
 #include <ctime>
 #include <chrono>
@@ -39,14 +38,18 @@ void mediator::init(const arg_name_to_value_map& a_n_v)
             boost::any_cast<std::string>(gr_it->second),
             m_graph, m_vertex_count, m_probability);
 
-        auto apt_it = a_n_v.find("alternate_property_type");
+        auto apt_it = a_n_v.find("alternate_property_types");
         assert(a_n_v.end() != apt_it);
-        m_alternate_property_type = boost::any_cast<
-            alternate_property_type>(apt_it->second);
-        assert(INVALID_APT != m_alternate_property_type);
+        m_alternate_property_types = boost::any_cast<
+            apt_list>(apt_it->second);
 
-        if (is_graph_item_related_property(m_alternate_property_type))
+        m_non_item_relateds_count = std::count_if( m_alternate_property_types.begin(), m_alternate_property_types.end(),
+                [](const alternate_property_type& a){ return !is_graph_item_related_property(a); } );
+
+        if (0 == m_non_item_relateds_count)
             return;
+
+        assert(m_non_item_relateds_count == 1);
 
         auto mu_it = a_n_v.find("mu_file");
         assert(a_n_v.end() != mu_it);
@@ -69,13 +72,27 @@ void mediator::init(const arg_name_to_value_map& a_n_v)
     }
 }
 
+void
+mediator::init(const CFGParser::Config& config)
+{
+    assert(!m_inited);
+    m_inited = true;
+
+    erdos_renyi_reader r;
+    r.get_graph_and_properties_from_file(config.graphFilePath,
+            m_graph, m_vertex_count, m_probability);
+
+    m_alternate_property_types = config.aptList;
+    results_writer::get_instance().prapare_writer(m_vertex_count, m_probability);
+}
+
 void mediator::run(boost::mpi::communicator& world)
 {
     assert(m_inited);
-    if(is_graph_item_related_property(m_alternate_property_type)) {
-        graph_item_property_task_manager t_m;
-        run_task_manager_and_send_to_output(t_m);
-        m_logger.close();
+    if(m_non_item_relateds_count == 0) {
+        graph_item_property_task_manager t_m(m_graph, m_alternate_property_types, m_logger);
+        t_m.run();
+        return;
     }
 
     if (1 == world.size()) {
@@ -99,20 +116,15 @@ void mediator::write_results(const single_results_list& s_r, double mu) const
     results_writer::get_instance().write_single_results_list(s_r, mu);
 }
 
-template<class T>
-void mediator::write_results(const T& results, const alternate_property_type apt) const
-{
-    results_writer::get_instance().write_graph_item_property_result(results, apt);
-}
-
 void mediator::run_task_manager_and_send_to_output(
     task_manager_base& t_m)
 {
+    assert(1 == m_alternate_property_types.size());
     // TODO: change cout to log.
     time_t c_t = time(0);
     m_logger << "\n>>>>> Calculation Started: " << ctime(&c_t);
     t_m.init(m_graph, m_mu_list, m_step_count,
-        m_randomization_type, m_alternate_property_type);
+        m_randomization_type, m_alternate_property_types.back());
     t_m.run();
     c_t = time(0);
     m_logger << "\n>>>>> Calculation Finished: " << ctime(&c_t);

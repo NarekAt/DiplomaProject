@@ -4,6 +4,7 @@
  */
 #include "package.h"
 #include "argument_parser.h"
+#include "config_file_parser.h"
 #include "mediator.h"
 #include "exception_base.h"
 #include <iostream>
@@ -42,10 +43,19 @@ int main(int argc, char* argv[])
         logger.open(get_log_file_name());
     }
     package::init(logger);
-    auto& a_p = argument_parser::get_instance();
-    auto& m = mediator::get_instance();
-    try {
-        m.init(a_p.parse_and_get_args(argc, argv, world.rank()));
+    
+    try
+    {
+        auto& m = mediator::get_instance();
+        if(argc != 2) 
+        {
+            auto& a_p = argument_parser::get_instance();
+            m.init(a_p.parse_and_get_args(argc, argv, world.rank()));
+        }
+        else
+        {
+            m.init(CFGParser::parse(argv[1]));
+        } 
         m.run(world);
     } catch (const exception_base& e) {
         // Only main process can abort environment

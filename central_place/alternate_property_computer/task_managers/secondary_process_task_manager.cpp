@@ -45,8 +45,8 @@ bool secondary_process_task_manager::receive_ingredients()
     m_randomizator_type = static_cast<randomization_type>(r_type);
     int ap_type = 0;
     m_world.recv(0, ALTERNATE_PROPERTY_TYPE, ap_type);
-    m_alternate_property_type = static_cast<alternate_property_type>(
-        ap_type);
+    m_alternate_property_type = (static_cast<alternate_property_type>(
+        ap_type));
     m_world.recv(0, MUS, m_taged_mus);
     m_world.recv(0, STATUS_TAGS, m_status_tags);
     return true;

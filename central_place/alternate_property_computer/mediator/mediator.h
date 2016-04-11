@@ -9,6 +9,8 @@
 #include "graph.h"
 #include <fstream>
 #include <boost/mpi.hpp>
+#include "results_writer.h"
+#include "config_file_parser.h"
 
 class task_manager_base;
 
@@ -29,6 +31,13 @@ public:
      * @note must be called before run() function, and only one time.
      */
     void init(const arg_name_to_value_map& a_n_v);
+
+    /**
+     * @brief Inits mediator
+     * @param consfig parsed configuration file.
+     * @note must be called before run() function, and only one time.
+     */
+    void init(const CFGParser::Config& config);
 
 public:
     /**
@@ -51,7 +60,10 @@ public:
      * 
      */
     template<class T>
-    void write_results(const T& results, const alternate_property_type apt) const;
+    void write_results(const T& results, const alternate_property_type apt) const
+    {
+        results_writer::get_instance().write_graph_item_property_result(results, apt);
+    }
 
 private:
     /**
@@ -68,7 +80,10 @@ private:
     mu_list m_mu_list;
     unsigned m_step_count;
     randomization_type m_randomization_type;
-    alternate_property_type m_alternate_property_type;
+
+    apt_list m_alternate_property_types;
+    unsigned m_non_item_relateds_count;
+
     boost::mpi::communicator m_world;
     unsigned m_vertex_count;
     double m_probability;

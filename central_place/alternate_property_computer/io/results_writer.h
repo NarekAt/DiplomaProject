@@ -9,6 +9,7 @@
 #include <fstream>
 #include "libxl.h"
 
+#include <boost/filesystem.hpp>
 
 /**
  * TODO: 1) make base class for writers to
@@ -125,3 +126,34 @@ private:
     double m_probability;
     std::ofstream& m_logger;
 };
+
+template <class T>
+void results_writer::write_graph_item_property_result(const T& result, const alternate_property_type type)
+{
+    const std::string typeStr = get_alternate_property_name_by_type(type);
+    std::string file_name = m_directory_name + "/" +
+        "graph" + "N" + "_" + std::to_string(result.size()) + "_" + typeStr + ".txt";
+
+    auto f = boost::filesystem::status(file_name);
+    if (boost::filesystem::exists(f)) {
+        if (!boost::filesystem::is_regular_file(f)) {
+            // TODO: write error message.
+            return;
+        }
+        // TODO: write info message.
+        return;
+    }
+    std::ofstream output;
+    output.open(file_name);
+    if (!output.is_open()) {
+        // TODO: write error message.
+        return;
+    }
+
+    for (unsigned int i = 0; i != result.size(); ++i)
+    {
+        output << i << " " << result[i] << std::endl;
+    }
+
+    addToSheet(file_name, typeStr);
+}

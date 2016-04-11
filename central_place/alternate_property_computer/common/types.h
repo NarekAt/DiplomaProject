@@ -65,6 +65,8 @@ enum alternate_property_type {
     INVALID_APT
 };
 
+typedef std::vector<alternate_property_type> apt_list;
+
 bool is_graph_item_related_property(const alternate_property_type t);
 
 /**

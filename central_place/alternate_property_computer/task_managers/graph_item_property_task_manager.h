@@ -15,8 +15,16 @@
 class graph_item_property_task_manager : public igraph_task_manager
 {
 public:
-    DECLARE_DELEGATING_CTOR3(graph_item_property_task_manager, igraph_task_manager);
+    graph_item_property_task_manager(const graph_types::graph& g,
+                        const apt_list& apts,
+                        std::ofstream& logger)
+        : igraph_task_manager(g, INVALID_APT, logger)
+        , m_graph_item_related_apts(apts)
+    {}
 
     void run();
+
+private:
+    apt_list m_graph_item_related_apts;
 };
 

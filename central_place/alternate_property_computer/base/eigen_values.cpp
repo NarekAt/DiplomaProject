@@ -17,7 +17,7 @@ void fillUpAdjacencyMatrix(const graph_types::graph& g, MatrixXd& m)
     {
         for(unsigned vY = 0; vY != size; ++vY)
         {
-            if (g.edge_exists(vX, vY))
+            if (vX == vY || g.edge_exists(vX, vY))
                     m(vX, vY) = 1;
         }
     }
