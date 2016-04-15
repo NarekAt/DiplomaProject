@@ -1,9 +1,5 @@
 #include "graph_item_property_task_manager.h"
-#include "betweenness_centrality.h"
-#include "connected_components.h"
-#include "degree_computer.h"
-#include "eigen_values.h"
-#include "shortestpath.h"
+#include "property_computers.h"
 
 #include "mediator.h"
 
@@ -33,6 +29,13 @@ graph_item_property_task_manager::run()
                 Base::BC bc (m_initial_graph);
                 bc.compute();
                 mediator::get_instance().write_results(bc.getResult(), BETWEENNESS_CENTRALITY);
+                break;
+           }
+           case EIGENVECTOR_CENTRALITY:
+           {
+                Base::EVC evc (m_initial_graph);
+                evc.compute();
+                mediator::get_instance().write_results(evc.getResult(), EIGENVECTOR_CENTRALITY);
                 break;
            }
            case EIGEN_VALUES:

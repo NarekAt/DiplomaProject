@@ -1,9 +1,5 @@
 #include "property_computer_factory.h"
-#include "connected_components.h"
-#include "shortestpath.h"
-#include "betweenness_centrality.h"
-#include "degree_computer.h"
-#include "eigen_values.h"
+#include "property_computers.h"
 
 #include <assert.h>
 #include <functional>
@@ -28,6 +24,10 @@ static type_to_property_computer s_type_to_property_computer = {
     std::make_pair(BETWEENNESS_CENTRALITY,
         [] (graph_types::graph& g) -> BC::BaseType* {
             return new BC(g);
+        }),
+    std::make_pair(EIGENVECTOR_CENTRALITY,
+        [] (graph_types::graph& g) -> EVC::BaseType* {
+            return new EVC(g);
         }),
     std::make_pair(DEGREE,
         [] (graph_types::graph& g) -> DegreeComputer::BaseType* {
