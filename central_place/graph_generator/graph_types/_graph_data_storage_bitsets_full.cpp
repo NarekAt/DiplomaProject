@@ -59,6 +59,19 @@ bool graph_data_storage_bitsets_full::impl_edge_exists(
     return neighbours[v2];
 }
 
+graph_size graph_data_storage_bitsets_full::impl_degree( const vertex& v) const
+{
+    const auto& neighbours = m_data[v];
+    unsigned count;
+
+    for (bitset_size_type i = 0; i < neighbours.size(); ++i) {
+        if (neighbours[i]) {
+            ++count;
+        }
+    }
+    return count;
+}
+
 set_of_vertices graph_data_storage_bitsets_full::impl_neighbors_set(
     const vertex& v) const
 {
@@ -115,9 +128,9 @@ set_of_edges graph_data_storage_bitsets_full::impl_edges_set() const
 {
     set_of_edges results;
     const auto l = m_data.size() - 1;
-    for (graph_size i = l; i >= constants::VERTEX_0; --i) {
+    for (int i = l; i >= 0; --i) {
         const auto& n = m_data[i];
-        for (bitset_size_type j = 0; j < static_cast<uint32_t>(i); ++i) {
+        for (bitset_size_type j = 0; j < static_cast<uint32_t>(i); ++j) {
             if (n[j]) {
                 results.insert(edge(vertex(j), i));
             }
@@ -130,9 +143,9 @@ sequence_of_edges graph_data_storage_bitsets_full::impl_edges_sequence() const
 {
     sequence_of_edges results;
     const auto l = m_data.size() - 1;
-    for (graph_size i = l; i >= constants::VERTEX_0; --i) {
+    for (int i = l; i >= 0; --i) {
         const auto& n = m_data[i];
-        for (bitset_size_type j = 0; j < static_cast<uint32_t>(i); ++i) {
+        for (bitset_size_type j = 0; j < static_cast<uint32_t>(i); ++j) {
             if (n[j]) {
                 results.push_back(edge(vertex(j), i));
             }
@@ -145,9 +158,9 @@ edge graph_data_storage_bitsets_full::impl_get_edge_by_index(
     unsigned long index) const
 {
     const auto l = m_data.size() - 1;
-    for (graph_size i = l; i >= constants::VERTEX_0; --i) {
+    for (int i = l; i >= 0; --i) {
         const auto& n = m_data[i];
-        for (bitset_size_type j = 0; j < static_cast<uint32_t>(i); ++i) {
+        for (bitset_size_type j = 0; j < static_cast<uint32_t>(i); ++j) {
             if (n[j]) {
                 if (0 == index) {
                     return edge(vertex(j), i);
@@ -172,7 +185,7 @@ void graph_data_storage_bitsets_full::one_way_add_edge(
     auto& v1_neighbours = m_data[v1];
     auto index = static_cast<size_t>(v2);
     assert(!v1_neighbours[index]);
-    v1_neighbours.set(index, true); 
+    v1_neighbours.set(index, true);
 }
 
 void graph_data_storage_bitsets_full::impl_remove_edge(
@@ -188,7 +201,7 @@ void graph_data_storage_bitsets_full::one_way_remove_edge(
     auto& v1_neighbours = m_data[v1];
     auto index = static_cast<size_t>(v2);
     assert(v1_neighbours[index]);
-    v1_neighbours.set(index, false); 
+    v1_neighbours.set(index, false);
 }
 
 void graph_data_storage_bitsets_full::impl_save(

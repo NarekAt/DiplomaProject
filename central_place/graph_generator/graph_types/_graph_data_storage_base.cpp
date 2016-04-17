@@ -17,7 +17,7 @@ namespace graph_types
 
 graph_size graph_data_storage_base::size() const
 {
-    return impl_size();    
+    return impl_size();
 }
 
 bool graph_data_storage_base::edge_exists(const vertex& v1, const vertex& v2) const
@@ -30,6 +30,11 @@ bool graph_data_storage_base::edge_exists(const edge& e) const
 {
     assert(e.first != e.second);
     return impl_edge_exists(e.first, e.second);
+}
+
+graph_size graph_data_storage_base::degree(const vertex& v) const
+{
+    return impl_degree(v);
 }
 
 set_of_vertices graph_data_storage_base::neighbors_set(const vertex& v) const
@@ -77,7 +82,7 @@ void graph_data_storage_base::add_edge(const vertex& v1, const vertex& v2)
     ++m_edges_count;
 }
 
-void graph_data_storage_base::add_edge(const edge& e) 
+void graph_data_storage_base::add_edge(const edge& e)
 {
     assert(e.first != e.second);
     impl_add_edge(e.first, e.second);

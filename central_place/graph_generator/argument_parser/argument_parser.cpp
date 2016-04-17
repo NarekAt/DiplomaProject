@@ -19,6 +19,14 @@ arg_name_to_value_map argument_parser::parse_and_get_args(
         boost::program_options::store(
             boost::program_options::parse_command_line(
                 argc, argv, m_options_description), vm);
+
+        if (1 == vm.count("model")) {
+            a_n_v.insert(std::make_pair(
+                "model",
+                vm["model"].as<std::string>()));
+        } else {
+            // TODO: throw exception
+        }
         if (1 == vm.count("size")) {
             a_n_v.insert(std::make_pair(
                 "size",
@@ -27,14 +35,20 @@ arg_name_to_value_map argument_parser::parse_and_get_args(
             // TODO: throw exception.
         }
         if (1 == vm.count("probability")) {
+            assert(boost::any_cast<std::string>(a_n_v["model"]) == "erdos_renyi");
             auto p = vm["probability"].as<double>();
             if (p < 0.0 || p > 1.0) {
                 // TODO: throw exception.
             }
             a_n_v.insert(std::make_pair(
                 "probability", p));
-        } else {
-            // TODO: throw exception.
+        }
+        if (1 == vm.count("edges")) {
+            assert(boost::any_cast<std::string>(a_n_v["model"]) == "block_hierarchy");
+            auto e = vm["edges"].as<unsigned>();
+
+            a_n_v.insert(std::make_pair(
+                "edges", e));
         }
         if (1 == vm.count("output_file")) {
             a_n_v.insert(std::make_pair(
@@ -95,13 +109,19 @@ argument_parser::argument_parser(std::ofstream& logger) :
     m_logger(logger)
 {
     m_options_description.add_options()
-        ("size,N", 
+        ("model,M",
+            boost::program_options::value<std::string>()->required(),
+            "Random graph generation model, [erdos_renyi, block_hierarchy]")
+        ("size,N",
             boost::program_options::value<unsigned>()->required(),
             "Size of graph")
-        ("probability,p", 
-            boost::program_options::value<double>()->required(), 
+        ("probability,p",
+            boost::program_options::value<double>(), 
             "Probability of edge, valid range is [0.0, 1.0]")
-        ("output_file,f", 
+        ("edges,E",
+            boost::program_options::value<unsigned>(),
+            "Number of edges")
+        ("output_file,f",
             boost::program_options::value<std::string>()->required(),
             "Output file path")
         ("core_type,t",

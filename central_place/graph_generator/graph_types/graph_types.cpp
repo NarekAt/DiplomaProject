@@ -28,4 +28,15 @@ storage_core_type get_core_type_by_name(
     return storage_core_type::INVALID_CT;
 }
 
+vertex invalidVertex()
+{
+    return std::numeric_limits<unsigned>::max();
+}
+
+edge invalidEdge()
+{
+    return edge(invalidVertex(), invalidVertex());
+
+}
+
 }

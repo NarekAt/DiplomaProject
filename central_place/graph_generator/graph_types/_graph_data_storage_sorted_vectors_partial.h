@@ -75,6 +75,7 @@ private:
         const vertex& v, sequence_of_edges& result) const;
 
 private:
+    virtual graph_size impl_degree(const vertex& v) const;
     virtual set_of_edges impl_edges_set() const;
     virtual sequence_of_edges impl_edges_sequence() const;
     virtual edge impl_get_edge_by_index(unsigned long i) const;

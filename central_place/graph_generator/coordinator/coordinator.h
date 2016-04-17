@@ -37,8 +37,10 @@ public:
 
 private:
     bool m_inited;
+    std::string m_model;
     unsigned m_vertex_count;
     double m_probability;
+    unsigned m_num_edges;
     graph_types::storage_core_type m_core_type;
     std::string m_output_file;
     std::ofstream& m_logger;

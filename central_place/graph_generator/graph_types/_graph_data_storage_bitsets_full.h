@@ -52,6 +52,7 @@ public:
 private:
     virtual graph_size impl_size() const;
     virtual bool impl_edge_exists(const vertex& v1, const vertex& v2) const;
+    virtual graph_size impl_degree(const vertex& v) const;
     virtual set_of_vertices impl_neighbors_set(const vertex& v) const;
     virtual sequence_of_vertices impl_neighbors_sequence(const vertex& v) const;
     virtual set_of_edges impl_neighbor_edges_set(const vertex& v) const;

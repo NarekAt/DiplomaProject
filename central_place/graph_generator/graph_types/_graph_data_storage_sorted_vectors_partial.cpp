@@ -101,7 +101,7 @@ sequence_of_vertices graph_data_storage_sorted_vectors_partial::impl_neighbors_s
     if (!neighbours.empty()) {
         result.insert(result.end(), neighbours.begin(), neighbours.end());
     }
-    return result; 
+    return result;
 }
 
 void graph_data_storage_sorted_vectors_partial::collect_less_neighbors_sequence(
@@ -160,6 +160,19 @@ void graph_data_storage_sorted_vectors_partial::collect_less_neighbor_edges_sequ
             result.push_back(edge(v_less, v));
         }
     }
+}
+
+graph_size graph_data_storage_sorted_vectors_partial::impl_degree(
+        const vertex& v) const
+{
+    const auto& neighbours = m_data[v];
+    unsigned count;
+    for (const auto& nbr : neighbours)
+    {
+        if (nbr)
+            ++count;
+    }
+    return count;
 }
 
 set_of_edges graph_data_storage_sorted_vectors_partial::impl_edges_set() const

@@ -39,7 +39,7 @@ bitset_size_type bitset_index(const vertex& v1, const vertex& v2)
  * @param v bitset owner vertex.
  * @param b_i bitset index.
  */
-vertex vertex_from_index(const vertex& v, const bitset_size_type b_i) 
+vertex vertex_from_index(const vertex& v, const bitset_size_type b_i)
 {
     return v + vertex(1) + vertex(b_i);
 }
@@ -98,6 +98,19 @@ bool graph_data_storage_bitsets_partial::strict_edge_exists(
     return neighbours[index];
 }
 
+graph_size graph_data_storage_bitsets_partial::impl_degree(
+        const vertex& v) const
+{
+    const auto& neighbours = m_data[v];
+    unsigned count;
+    for (bitset_size_type i = 0; i < neighbours.size(); ++i) {
+        if (neighbours[i]) {
+            ++count;
+        }
+    }
+    return count;
+}
+
 set_of_vertices graph_data_storage_bitsets_partial::impl_neighbors_set(
     const vertex& v) const
 {
@@ -133,7 +146,7 @@ sequence_of_vertices graph_data_storage_bitsets_partial::impl_neighbors_sequence
             result.push_back(vertex_from_index(v, i));
         }
     }
-    return result; 
+    return result;
 }
 
 void graph_data_storage_bitsets_partial::collect_less_neighbors_sequence(
@@ -259,7 +272,7 @@ void graph_data_storage_bitsets_partial::strict_add_edge(
     auto& v1_neighbours = m_data[v1];
     auto index = bitset_index(v1, v2);
     assert(!v1_neighbours[index]);
-    v1_neighbours.set(index, true); 
+    v1_neighbours.set(index, true);
 }
 
 void graph_data_storage_bitsets_partial::impl_remove_edge(
@@ -279,7 +292,7 @@ void graph_data_storage_bitsets_partial::strict_remove_edge(
     auto& v1_neighbours = m_data[v1];
     auto index = bitset_index(v1, v2);
     assert(v1_neighbours[index]);
-    v1_neighbours.set(index, false); 
+    v1_neighbours.set(index, false);
 }
 
 void graph_data_storage_bitsets_partial::impl_save(

@@ -56,6 +56,19 @@ bool graph_data_storage_sorted_vectors_full::impl_edge_exists(
     return std::binary_search(neighbours.begin(), neighbours.end(), v2);
 }
 
+graph_size graph_data_storage_sorted_vectors_full::impl_degree(
+        const vertex& v) const
+{
+    const auto& neighbours = m_data[v];
+    unsigned count;
+    for (const auto& nbr : neighbours)
+    {
+        if (nbr)
+            ++count;
+    }
+    return count;
+}
+
 set_of_vertices graph_data_storage_sorted_vectors_full::impl_neighbors_set(
     const vertex& v) const
 {
@@ -105,7 +118,7 @@ set_of_edges graph_data_storage_sorted_vectors_full::impl_edges_set() const
 {
     set_of_edges results;
     const auto l = m_data.size() - 1;
-    for (graph_size i = l; i >= constants::VERTEX_0; --i) {
+    for (int i = l; i >= 0; --i) {
         const auto& n = m_data[i];
         for (const auto& v : n) {
             if (v >= i) {
@@ -121,7 +134,7 @@ sequence_of_edges graph_data_storage_sorted_vectors_full::impl_edges_sequence() 
 {
     sequence_of_edges results;
     const auto l = m_data.size() - 1;
-    for (graph_size i = l; i >= constants::VERTEX_0; --i) {
+    for (int i = l; i >= 0; --i) {
         const auto& n = m_data[i];
         for (const auto& v : n) {
             if (v >= i) {
@@ -137,7 +150,7 @@ edge graph_data_storage_sorted_vectors_full::impl_get_edge_by_index(
     unsigned long index) const
 {
     const auto l = m_data.size() - 1;
-    for (graph_size i = l; i >= constants::VERTEX_0; --i) {
+    for (int i = l; i >= 0; --i) {
         const auto& n = m_data[i];
         for (const auto& v : n) {
             if (v >= i) {
