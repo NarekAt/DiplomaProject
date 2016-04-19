@@ -9,14 +9,19 @@ CFGParser::Config CFGParser::parse(const std::string& cfgFilePath)
     Config config;
     try
     {
-        config.graphFilePath = pt.get<std::string>("config.graph-path");
-        config.clustersCount = pt.get<unsigned>("config.clusters-count");
+        for(const auto path : pt.get_child("config.graphs"))
+        {
+            config.gpList.push_back(path.second.data());
+        }
+//        config.graphFilePath = pt.get<std::string>("config.graph-path");
 
         for (const auto property : pt.get_child("config.properties"))
         {
             const auto type = get_alternate_property_type_by_name(property.second.data());
             config.aptList.push_back(type);
         }
+
+        config.calcualteAvg = pt.get<bool>("config.calcuate-average");
     }
     catch(...)
     {

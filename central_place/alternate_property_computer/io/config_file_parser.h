@@ -5,14 +5,16 @@
 // Config file prototype
 // <?xml version="1.0"?>
 // <config>
-//     <graph-path></graph-path>
-//     <clusters-count></clusters-count>
+//     <graphs>
+//         <graph-path></graph-path>
+//     </graphs>
 //     <properties>
 //         <property></property>
 //         <property></property>
 //         <property></property>
 //         <property></property>
 //     </properties>
+//     <calcuate-average></calcuate-average>
 // </config>
 
 #ifndef INCLUDED__CONFIG_FILE_PARSER_H
@@ -27,13 +29,15 @@
 class CFGParser
 {
 public:
+    typedef std::vector<std::string> GPList;
     typedef std::vector<alternate_property_type> APTList;
 
     struct Config
     {
-        std::string graphFilePath;
+        GPList      gpList;
         unsigned    clustersCount;
         APTList     aptList;
+        bool        calcualteAvg;
     };
 
 public:

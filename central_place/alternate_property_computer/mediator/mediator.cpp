@@ -34,9 +34,10 @@ void mediator::init(const arg_name_to_value_map& a_n_v)
 
         auto gr_it = a_n_v.find("graph_file");
         assert(a_n_v.end() != gr_it);
-        r.get_graph_and_properties_from_file(
-            boost::any_cast<std::string>(gr_it->second),
-            m_graph, m_vertex_count, m_probability);
+        m_graphPaths.push_back(boost::any_cast<std::string>(gr_it->second));
+//        r.get_graph_and_properties_from_file(
+//            boost::any_cast<std::string>(gr_it->second),
+//            m_graph, m_vertex_count, m_probability);
 
         auto apt_it = a_n_v.find("alternate_property_types");
         assert(a_n_v.end() != apt_it);
@@ -78,10 +79,11 @@ mediator::init(const CFGParser::Config& config)
     assert(!m_inited);
     m_inited = true;
 
-    erdos_renyi_reader r;
-    r.get_graph_and_properties_from_file(config.graphFilePath,
-            m_graph, m_vertex_count, m_probability);
+//    erdos_renyi_reader r;
+//    r.get_graph_and_properties_from_file(config.graphFilePath,
+//            m_graph, m_vertex_count, m_probability);
 
+    m_graphPaths = config.gpList;
     m_alternate_property_types = config.aptList;
     results_writer::get_instance().prapare_writer(m_vertex_count, m_probability);
 }
@@ -89,9 +91,10 @@ mediator::init(const CFGParser::Config& config)
 void mediator::run(boost::mpi::communicator& world)
 {
     assert(m_inited);
+
     if(m_non_item_relateds_count == 0) {
-        graph_item_property_task_manager t_m(m_graph, m_alternate_property_types, m_logger);
-        t_m.run();
+//        graph_item_property_task_manager t_m(m_graph, m_alternate_property_types, m_logger);
+//        t_m.run();
         return;
     }
 
@@ -122,10 +125,18 @@ void mediator::run_task_manager_and_send_to_output(
     assert(1 == m_alternate_property_types.size());
     // TODO: change cout to log.
     time_t c_t = time(0);
+
+    graph_types::graph graph(graph_types::storage_core_type::BITSETS_FULL);
+
+    erdos_renyi_reader r;
+
+    r.get_graph_and_properties_from_file(m_graphPaths.front(),
+                                         graph, m_vertex_count, m_probability);
+
     m_logger << "\n>>>>> Calculation Started: " << ctime(&c_t);
-    t_m.init(m_graph, m_mu_list, m_step_count,
-        m_randomization_type, m_alternate_property_types.back());
-    t_m.run();
+//    t_m.init(m_graph, m_mu_list, m_step_count,
+//        m_randomization_type, m_alternate_property_types.back());
+//    t_m.run();
     c_t = time(0);
     m_logger << "\n>>>>> Calculation Finished: " << ctime(&c_t);
 }
@@ -151,6 +162,5 @@ void mediator::destroy()
 
 mediator::mediator(std::ofstream& logger) :
     m_inited(false),
-    m_graph(graph_types::storage_core_type::BITSETS_FULL),
     m_logger(logger)
 {}

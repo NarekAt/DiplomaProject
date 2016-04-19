@@ -35,7 +35,7 @@ arg_name_to_value_map argument_parser::parse_and_get_args(
             // TODO: throw exception.
         }
         if (1 == vm.count("probability")) {
-            assert(boost::any_cast<std::string>(a_n_v["model"]) == "erdos_renyi");
+            assert(boost::any_cast<std::string>(a_n_v["model"]) == "erdos_reyni");
             auto p = vm["probability"].as<double>();
             if (p < 0.0 || p > 1.0) {
                 // TODO: throw exception.
@@ -111,7 +111,7 @@ argument_parser::argument_parser(std::ofstream& logger) :
     m_options_description.add_options()
         ("model,M",
             boost::program_options::value<std::string>()->required(),
-            "Random graph generation model, [erdos_renyi, block_hierarchy]")
+            "Random graph generation model, [erdos_reyni, block_hierarchy]")
         ("size,N",
             boost::program_options::value<unsigned>()->required(),
             "Size of graph")

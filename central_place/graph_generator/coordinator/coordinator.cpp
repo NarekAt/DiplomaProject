@@ -48,7 +48,7 @@ void coordinator::run()
 {
     generator g;
     writer w;
-    if(m_model == "erdos_renyi")
+    if(m_model == "erdos_reyni")
     {
         w.run(g.run(m_vertex_count, m_probability, m_core_type, m_logger),
                 m_vertex_count, m_probability, m_output_file, m_logger);

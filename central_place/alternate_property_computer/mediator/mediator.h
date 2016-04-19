@@ -76,7 +76,7 @@ private:
 
 private:
     bool m_inited;
-    graph_types::graph m_graph;
+    std::vector<std::string> m_graphPaths;
     mu_list m_mu_list;
     unsigned m_step_count;
     randomization_type m_randomization_type;
