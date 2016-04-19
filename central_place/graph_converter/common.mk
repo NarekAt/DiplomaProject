@@ -2,7 +2,7 @@ GCC=gcc
 
 CXXFLAGS=-std=c++11
 IFLAGS=
-LFLAGS=-lstdc++ -Wl,-Bstatic -lboost_graph -lboost_serialization -Wl,-Bdynamic -lm -L/home/natayan/boost/boost_1_53_0/stage/lib
+LFLAGS=-lstdc++ -Wl,-Bstatic -lboost_graph -lboost_serialization -Wl,-Bdynamic -lm -L/home/elchyan/boost/boost_1_53_0/stage/lib
 
 DIR=objs
 

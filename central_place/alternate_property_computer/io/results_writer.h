@@ -27,9 +27,10 @@ public:
      * @brief Prepares writer.
      * @param n Vertex count of graph
      * @param p Probability of Erdos-Renyi graph
+     * @param directoryPrefix optional prefix for the folder name
      * @note Must be called only one time.
      */
-    void prapare_writer(unsigned n, double p);
+    void prapare_writer(unsigned n, double p, std::string directoryPrefix = std::string(""));
 
 private:
     /**
@@ -124,6 +125,7 @@ private:
     bool m_is_writer_ready;
     unsigned m_vertex_count;
     double m_probability;
+    std::string m_directory_prefix;
     std::ofstream& m_logger;
 };
 

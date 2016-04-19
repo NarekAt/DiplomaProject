@@ -11,10 +11,11 @@
 
 results_writer* results_writer::s_instance = nullptr;
 
-void results_writer::prapare_writer(unsigned n, double p)
+void results_writer::prapare_writer(unsigned n, double p, std::string directoryPrefix)
 {
     m_vertex_count = n;
     m_probability = p;
+    m_directory_prefix = directoryPrefix;
     assert(!m_is_writer_ready);
     if (!prepare_output_directory()) {
         // TODO: throw exception.
@@ -64,7 +65,7 @@ bool results_writer::prepare_output_directory()
     if (!if_dir_dont_exists_then_create(m_directory_name)) {
         return false;
     }
-    m_directory_name += std::string("/") +
+    m_directory_name += std::string("/") + m_directory_prefix +
         get_time_name_of_folder() + "_N" + std::to_string(m_vertex_count) +
         "_p" + std::to_string(m_probability);
     if (!if_dir_dont_exists_then_create(m_directory_name)) {

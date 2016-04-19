@@ -35,9 +35,10 @@ public:
     /**
      * @brief Inits mediator
      * @param consfig parsed configuration file.
+     * @param rank_of_process rank of the current process.
      * @note must be called before run() function, and only one time.
      */
-    void init(const CFGParser::Config& config);
+    void init(const CFGParser::Config& config, int rank_of_process);
 
 public:
     /**

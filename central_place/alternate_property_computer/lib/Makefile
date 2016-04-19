@@ -1,7 +1,7 @@
 TARGET=alternate_property_computer.exe
 include ../common.mk
 
-SUBDIRS=../exceptions ../graph_types ../common ../package ../main ../argument_parser ../mediator ../io /home/natayan/libs_space/libxl-3.6.5.0/lib64 ../property_counters ../randomizers ../task_managers ../base
+SUBDIRS=../exceptions ../graph_types ../common ../package ../main ../argument_parser ../mediator ../io /home/elchyan/libs_space/libxl-3.6.5.0/lib64 ../property_counters ../randomizers ../task_managers ../base
 OBJS=$(wildcard $(join $(SUBDIRS), $(DIR)/*.o))
 
 $(TARGET) : $(OBJS)
