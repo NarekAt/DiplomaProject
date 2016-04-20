@@ -11,10 +11,11 @@
 
 results_writer* results_writer::s_instance = nullptr;
 
-void results_writer::prapare_writer(unsigned n, double p)
+void results_writer::prapare_writer(unsigned n, double p, const std::string& directoryPrefix)
 {
     m_vertex_count = n;
     m_probability = p;
+    m_directory_prefix = directoryPrefix;
     assert(!m_is_writer_ready);
     if (!prepare_output_directory()) {
         // TODO: throw exception.

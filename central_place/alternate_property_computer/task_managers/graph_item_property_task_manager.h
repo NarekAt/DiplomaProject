@@ -24,6 +24,8 @@ public:
 
     void run();
 
+    ~graph_item_property_task_manager();
+
 private:
     apt_list m_graph_item_related_apts;
 };

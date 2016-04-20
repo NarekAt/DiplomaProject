@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
         }
         else
         {
-            m.init(CFGParser::parse(argv[1]));
+            m.init(CFGParser::parse(argv[1]), world.rank());
         } 
         m.run(world);
     } catch (const exception_base& e) {

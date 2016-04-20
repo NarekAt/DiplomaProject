@@ -30,13 +30,9 @@ void mediator::init(const arg_name_to_value_map& a_n_v)
         return;
     }
     try {
-        erdos_renyi_reader r;
-
         auto gr_it = a_n_v.find("graph_file");
         assert(a_n_v.end() != gr_it);
-        r.get_graph_and_properties_from_file(
-            boost::any_cast<std::string>(gr_it->second),
-            m_graph, m_vertex_count, m_probability);
+        m_graphPaths.push_back(boost::any_cast<std::string>(gr_it->second));
 
         auto apt_it = a_n_v.find("alternate_property_types");
         assert(a_n_v.end() != apt_it);
@@ -53,6 +49,8 @@ void mediator::init(const arg_name_to_value_map& a_n_v)
 
         auto mu_it = a_n_v.find("mu_file");
         assert(a_n_v.end() != mu_it);
+
+        erdos_renyi_reader r;
         r.get_mus_from_file(
             boost::any_cast<std::string>(mu_it->second), m_mu_list);
         
@@ -73,28 +71,35 @@ void mediator::init(const arg_name_to_value_map& a_n_v)
 }
 
 void
-mediator::init(const CFGParser::Config& config)
+mediator::init(const CFGParser::Config& config, int rank_of_process)
 {
     assert(!m_inited);
     m_inited = true;
 
-    erdos_renyi_reader r;
-    r.get_graph_and_properties_from_file(config.graphFilePath,
-            m_graph, m_vertex_count, m_probability);
-
+    m_graphPaths = config.gpList;
+    m_calc_avg = config.calcualteAvg;
     m_alternate_property_types = config.aptList;
-    results_writer::get_instance().prapare_writer(m_vertex_count, m_probability);
+
+    std::string dirPrefix = "graph_" + std::to_string(rank_of_process) + "_";
+    results_writer::get_instance().prapare_writer(m_vertex_count, m_probability, dirPrefix);
 }
 
-void mediator::run(boost::mpi::communicator& world)
+void mediator::run_item_prop_task_mgr(boost::mpi::communicator& world)
 {
-    assert(m_inited);
-    if(m_non_item_relateds_count == 0) {
-        graph_item_property_task_manager t_m(m_graph, m_alternate_property_types, m_logger);
-        t_m.run();
-        return;
-    }
+    erdos_renyi_reader r;
+    graph_types::graph graph (graph_types::storage_core_type::BITSETS_FULL);
 
+    assert(world.size() == m_graphPaths.size());
+    r.get_graph_and_properties_from_file(m_graphPaths[world.rank()],
+    graph, m_vertex_count, m_probability);
+
+    graph_item_property_task_manager t_m(graph,
+    m_alternate_property_types, m_logger);
+    t_m.run();
+}
+
+void mediator::run_global_prop_task_mgr(boost::mpi::communicator& world)
+{
     if (1 == world.size()) {
         single_process_task_manager t_m(world, m_logger);
         run_task_manager_and_send_to_output(t_m);
@@ -111,6 +116,18 @@ void mediator::run(boost::mpi::communicator& world)
     }
 }
 
+void mediator::run(boost::mpi::communicator& world)
+{
+    assert(m_inited);
+
+    if(m_non_item_relateds_count == 0)
+    {
+        run_item_prop_task_mgr(world);
+    }
+    else
+        run_global_prop_task_mgr(world);
+}
+
 void mediator::write_results(const single_results_list& s_r, double mu) const
 {
     results_writer::get_instance().write_single_results_list(s_r, mu);
@@ -120,11 +137,17 @@ void mediator::run_task_manager_and_send_to_output(
     task_manager_base& t_m)
 {
     assert(1 == m_alternate_property_types.size());
-    // TODO: change cout to log.
     time_t c_t = time(0);
+
+    graph_types::graph graph(graph_types::storage_core_type::BITSETS_FULL);
+    erdos_renyi_reader r;
+    r.get_graph_and_properties_from_file(m_graphPaths.front(),
+                                         graph, m_vertex_count, m_probability);
+
     m_logger << "\n>>>>> Calculation Started: " << ctime(&c_t);
-    t_m.init(m_graph, m_mu_list, m_step_count,
+    t_m.init(graph, m_mu_list, m_step_count, 
         m_randomization_type, m_alternate_property_types.back());
+
     t_m.run();
     c_t = time(0);
     m_logger << "\n>>>>> Calculation Finished: " << ctime(&c_t);
@@ -151,6 +174,5 @@ void mediator::destroy()
 
 mediator::mediator(std::ofstream& logger) :
     m_inited(false),
-    m_graph(graph_types::storage_core_type::BITSETS_FULL),
     m_logger(logger)
 {}

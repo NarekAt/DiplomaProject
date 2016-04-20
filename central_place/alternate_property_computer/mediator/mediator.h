@@ -7,10 +7,11 @@
 
 #include "types.h"
 #include "graph.h"
-#include <fstream>
-#include <boost/mpi.hpp>
 #include "results_writer.h"
 #include "config_file_parser.h"
+
+#include <fstream>
+#include <boost/mpi.hpp>
 
 class task_manager_base;
 
@@ -35,11 +36,24 @@ public:
     /**
      * @brief Inits mediator
      * @param consfig parsed configuration file.
+     * @param rank_of_process rank of the current process.
      * @note must be called before run() function, and only one time.
      */
-    void init(const CFGParser::Config& config);
+    void init(const CFGParser::Config& config, int rank_of_process);
 
 public:
+    /**
+     * @brief Runs graph_item_property_task_manager
+     * @param world mpi communicator
+     */
+    void run_item_prop_task_mgr(boost::mpi::communicator& world);
+
+    /**
+     * @brief Runs graph global property related task managers
+     * @param world mpi communicator
+     */
+    void run_global_prop_task_mgr(boost::mpi::communicator& world);
+
     /**
      * @brief Runs mediator
      * @param world mpi communicator.
@@ -75,19 +89,22 @@ private:
     void run_task_manager_and_send_to_output(task_manager_base& t_m);
 
 private:
-    bool m_inited;
-    graph_types::graph m_graph;
-    mu_list m_mu_list;
-    unsigned m_step_count;
-    randomization_type m_randomization_type;
+    typedef std::vector<std::string> GraphPaths;
 
-    apt_list m_alternate_property_types;
-    unsigned m_non_item_relateds_count;
+    bool                     m_inited;
+    GraphPaths               m_graphPaths;
+    bool                     m_calc_avg;
+    mu_list                  m_mu_list;
+    unsigned                 m_step_count;
+    randomization_type       m_randomization_type;
+
+    apt_list                 m_alternate_property_types;
+    unsigned                 m_non_item_relateds_count;
 
     boost::mpi::communicator m_world;
-    unsigned m_vertex_count;
-    double m_probability;
-    std::ofstream& m_logger;
+    unsigned                 m_vertex_count;
+    double                   m_probability;
+    std::ofstream&           m_logger;
     /// @}
 
     /// @name singleton management

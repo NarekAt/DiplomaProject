@@ -19,6 +19,8 @@ public:
 
     virtual void run() = 0;
 
+    virtual ~igraph_task_manager() = default;
+
 protected:
     graph_types::graph      m_initial_graph;
     alternate_property_type m_alternate_property_type;

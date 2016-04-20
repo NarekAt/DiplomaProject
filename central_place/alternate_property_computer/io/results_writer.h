@@ -29,7 +29,7 @@ public:
      * @param p Probability of Erdos-Renyi graph
      * @note Must be called only one time.
      */
-    void prapare_writer(unsigned n, double p);
+    void prapare_writer(unsigned n, double p, const std::string& directoryPrefix = "");
 
 private:
     /**
@@ -124,6 +124,7 @@ private:
     bool m_is_writer_ready;
     unsigned m_vertex_count;
     double m_probability;
+    std::string m_directory_prefix;
     std::ofstream& m_logger;
 };
 
