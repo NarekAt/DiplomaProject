@@ -1,63 +1,28 @@
 #include "graph_item_property_task_manager.h"
+#include "property_computer_factory.h"
 #include "property_computers.h"
 
 #include "mediator.h"
 
+graph_item_property_task_manager::graph_item_property_task_manager(const graph_types::graph& g,
+                                                                   const apt_list& apts,
+                                                                   bool calcDistr,
+                                                                   std::ofstream& logger)
+        : igraph_task_manager(g, INVALID_APT, logger)
+        , m_graph_item_related_apts(apts)
+        , m_calc_distr(calcDistr)
+{
+    Base::PropertyComputerController::getInstance().registerPropertyComputers();
+}
+
 void
 graph_item_property_task_manager::run()
 {
-    for (const auto& type : m_graph_item_related_apts)
+    for (const alternate_property_type& type : m_graph_item_related_apts)
     {
-        switch(type)
-        {
-            case CONNECTED_COMPONENTS:
-                {
-                    Base::ConnectedComponents cp (m_initial_graph);
-                    cp.compute();
-                    mediator::get_instance().write_results(cp.getResult(), CONNECTED_COMPONENTS);
-                    break;
-                }
-            case SHORTEST_PATH:
-                {
-                    Base::ShortestPath sp (m_initial_graph);
-                    sp.compute();
-                    mediator::get_instance().write_results(sp.getResult(), SHORTEST_PATH);
-                    break;
-                }
-            case BETWEENNESS_CENTRALITY:
-                {
-                    Base::BC bc (m_initial_graph);
-                    bc.compute();
-                    mediator::get_instance().write_results(bc.getResult(), BETWEENNESS_CENTRALITY);
-                    break;
-                }
-            case EIGENVECTOR_CENTRALITY:
-                {
-                    Base::EVC evc (m_initial_graph);
-                    evc.compute();
-                    mediator::get_instance().write_results(evc.getResult(), EIGENVECTOR_CENTRALITY);
-                    break;
-                }
-            case EIGEN_VALUES:
-                {
-                    Base::EigenValues ev (m_initial_graph);
-                    ev.compute();
-                    mediator::get_instance().write_results(ev.getResult(), EIGEN_VALUES);
-                    break;
-                }
-            case DEGREE:
-                {
-                    Base::DegreeComputer dc (m_initial_graph);
-                    dc.compute();
-                    mediator::get_instance().write_results(dc.getResult(), DEGREE);
-                    break;
-                }
-            default:
-                {
-                    // TODO: throw exception
-                    assert(false);
-                }
-        }
+        Base::PropertyComputerRunner::compute_and_write(m_initial_graph, type);
+        if (m_calc_distr)
+            Base::PropertyComputerRunner::calculate_distributions_and_write(m_initial_graph, type);
     }
 }
 

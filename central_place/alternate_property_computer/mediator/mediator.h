@@ -36,10 +36,9 @@ public:
     /**
      * @brief Inits mediator
      * @param consfig parsed configuration file.
-     * @param rank_of_process rank of the current process.
      * @note must be called before run() function, and only one time.
      */
-    void init(const CFGParser::Config& config, int rank_of_process);
+    void init(const CFGParser::Config& config);
 
 public:
     /**
@@ -93,6 +92,7 @@ private:
 
     bool                     m_inited;
     GraphPaths               m_graphPaths;
+    bool                     m_calc_distr;
     bool                     m_calc_avg;
     mu_list                  m_mu_list;
     unsigned                 m_step_count;

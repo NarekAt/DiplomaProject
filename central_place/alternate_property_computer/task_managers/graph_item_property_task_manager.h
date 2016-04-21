@@ -17,10 +17,8 @@ class graph_item_property_task_manager : public igraph_task_manager
 public:
     graph_item_property_task_manager(const graph_types::graph& g,
                         const apt_list& apts,
-                        std::ofstream& logger)
-        : igraph_task_manager(g, INVALID_APT, logger)
-        , m_graph_item_related_apts(apts)
-    {}
+                        bool calcDistr,
+                        std::ofstream& logger);
 
     void run();
 
@@ -28,5 +26,6 @@ public:
 
 private:
     apt_list m_graph_item_related_apts;
+    bool m_calc_distr;
 };
 

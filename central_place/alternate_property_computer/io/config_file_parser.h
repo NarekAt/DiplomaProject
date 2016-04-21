@@ -14,6 +14,7 @@
 //         <property></property>
 //         <property></property>
 //     </properties>
+//     <calculate-distribution></calculate-distribution>
 //     <calcuate-average></calcuate-average>
 // </config>
 
@@ -37,7 +38,8 @@ public:
         GPList      gpList;
         unsigned    clustersCount;
         APTList     aptList;
-        bool        calcualteAvg;
+        bool        calculateAvg;
+        bool        calculateDistr;
     };
 
 public:

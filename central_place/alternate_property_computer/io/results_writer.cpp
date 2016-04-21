@@ -66,8 +66,7 @@ bool results_writer::prepare_output_directory()
         return false;
     }
     m_directory_name += std::string("/") +
-        get_time_name_of_folder() + "_N" + std::to_string(m_vertex_count) +
-        "_p" + std::to_string(m_probability);
+        get_time_name_of_folder() + m_directory_prefix;
     if (!if_dir_dont_exists_then_create(m_directory_name)) {
         return false;
     }

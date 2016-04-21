@@ -64,28 +64,28 @@ void mediator::init(const arg_name_to_value_map& a_n_v)
             rt_it->second);
         assert(INVALID_RT != m_randomization_type);
 
-        results_writer::get_instance().prapare_writer(m_vertex_count, m_probability);
     } catch (const boost::bad_any_cast&) {
         assert(!"bad any cast");
     }
 }
 
 void
-mediator::init(const CFGParser::Config& config, int rank_of_process)
+mediator::init(const CFGParser::Config& config)
 {
     assert(!m_inited);
     m_inited = true;
 
     m_graphPaths = config.gpList;
-    m_calc_avg = config.calcualteAvg;
+    m_calc_distr = config.calculateDistr;
+    m_calc_avg = config.calculateAvg;
     m_alternate_property_types = config.aptList;
-
-    std::string dirPrefix = "graph_" + std::to_string(rank_of_process) + "_";
-    results_writer::get_instance().prapare_writer(m_vertex_count, m_probability, dirPrefix);
 }
 
 void mediator::run_item_prop_task_mgr(boost::mpi::communicator& world)
 {
+    std::string dirPrefix = "_graph_" + std::to_string(world.rank());
+    results_writer::get_instance().prapare_writer(m_vertex_count, m_probability, dirPrefix);
+
     erdos_renyi_reader r;
     graph_types::graph graph (graph_types::storage_core_type::BITSETS_FULL);
 
@@ -94,7 +94,7 @@ void mediator::run_item_prop_task_mgr(boost::mpi::communicator& world)
     graph, m_vertex_count, m_probability);
 
     graph_item_property_task_manager t_m(graph,
-    m_alternate_property_types, m_logger);
+    m_alternate_property_types, m_calc_distr, m_logger);
     t_m.run();
 }
 
@@ -136,6 +136,8 @@ void mediator::write_results(const single_results_list& s_r, double mu) const
 void mediator::run_task_manager_and_send_to_output(
     task_manager_base& t_m)
 {
+    results_writer::get_instance().prapare_writer(m_vertex_count, m_probability);
+
     assert(1 == m_alternate_property_types.size());
     time_t c_t = time(0);
 

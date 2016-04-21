@@ -20,7 +20,8 @@ CFGParser::Config CFGParser::parse(const std::string& cfgFilePath)
             config.aptList.push_back(type);
         }
 
-        config.calcualteAvg = pt.get<bool>("config.calculate-average");
+        config.calculateAvg = pt.get<bool>("config.calculate-average");
+        config.calculateDistr = pt.get<bool>("config.calculate-distribution");
     }
     catch(...)
     {
