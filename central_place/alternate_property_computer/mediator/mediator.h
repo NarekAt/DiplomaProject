@@ -78,6 +78,15 @@ public:
         results_writer::get_instance().write_graph_item_property_result(results, apt);
     }
 
+    /**
+     * 
+     */
+    template<class T>
+    void write_distribution(const T& results, const alternate_property_type apt) const
+    {
+        results_writer::get_instance().write_graph_item_property_distribution(results, apt);
+    }
+
 private:
     /**
      * @brief Uses task manager for initing it, run, get result

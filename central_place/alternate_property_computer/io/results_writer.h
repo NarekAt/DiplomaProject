@@ -65,6 +65,15 @@ public:
         const alternate_property_type type);
 
     /**
+    * @brief Writes Graph item property computation distribution result path into the excel file
+    * @param result result vector
+    * @param type property type
+    */
+    template <class T>
+    void write_graph_item_property_distribution(const T& result,
+        const alternate_property_type type);
+
+    /**
     * @brief Add entry in excel file
     * @param file_name name of the result file
     * @param property_name name of the computed property
@@ -128,33 +137,48 @@ private:
     std::ofstream& m_logger;
 };
 
+void open_file(const std::string& fName, std::ofstream& os);
+
 template <class T>
-void results_writer::write_graph_item_property_result(const T& result, const alternate_property_type type)
+void results_writer::write_graph_item_property_result(const T& result,
+                                                      const alternate_property_type type)
 {
     const std::string typeStr = get_alternate_property_name_by_type(type);
     std::string file_name = m_directory_name + "/" +
-        "graph" + "N" + "_" + std::to_string(result.size()) + "_" + typeStr + ".txt";
+                            "graph" + "N" + "_" +
+                            std::to_string(result.size()) +
+                            "_" + typeStr + ".txt";
 
-    auto f = boost::filesystem::status(file_name);
-    if (boost::filesystem::exists(f)) {
-        if (!boost::filesystem::is_regular_file(f)) {
-            // TODO: write error message.
-            return;
-        }
-        // TODO: write info message.
-        return;
-    }
     std::ofstream output;
-    output.open(file_name);
-    if (!output.is_open()) {
-        // TODO: write error message.
-        return;
-    }
-
+    open_file(file_name, output);
     for (unsigned int i = 0; i != result.size(); ++i)
     {
         output << i << " " << result[i] << std::endl;
     }
 
     addToSheet(file_name, typeStr);
+}
+
+template <class T>
+void results_writer::write_graph_item_property_distribution(const T& result,
+                                                            const alternate_property_type type)
+{
+
+    const std::string typeStr = get_alternate_property_name_by_type(type);
+    std::string file_name = m_directory_name + "/" +
+                            "graph" + "N" + "_" +
+                            std::to_string(result.size()) +
+                            "_" + typeStr + "_" +
+                            "distr" + ".txt";
+ 
+    std::ofstream output;
+    open_file(file_name, output); 
+
+    output << "### Distribution for graph property: " << typeStr << " ###" << std::endl;
+    output << "### Property Value --> Number of vertices" << " ###" << std::endl;
+
+    for (unsigned int i = 0; i != result.size(); ++i)
+    {
+        output << i << " " << result[i] << std::endl;
+    }
 }

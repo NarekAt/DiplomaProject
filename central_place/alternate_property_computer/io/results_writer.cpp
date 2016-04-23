@@ -9,6 +9,29 @@
 #include <ctime>
 #include <chrono>
 
+
+void open_file(const std::string& fName, std::ofstream& os)
+{
+    auto f = boost::filesystem::status(fName);
+    if (boost::filesystem::exists(f))
+    {
+        if (!boost::filesystem::is_regular_file(f))
+        {
+            // TODO: write error message.
+            return;
+        }
+        std::cerr << "An unexpected attempt to ovveride the existing result file" << std::endl;
+        return;
+    }
+    os.open(fName);
+    if (!os.is_open())
+    {
+        std::cerr << "Failed to open the result file" << std::endl;
+        return;
+    }
+}
+
+
 results_writer* results_writer::s_instance = nullptr;
 
 void results_writer::prapare_writer(unsigned n, double p, const std::string& directoryPrefix)
