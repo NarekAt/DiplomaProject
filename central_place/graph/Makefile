@@ -1,11 +1,16 @@
 SUBDIRS=base utilities testing lib
 LIBDIR=base
 
-.PHONY : compile lib clean
+.PHONY : compile debug lib clean
 
 compile:
 	@for dir in $(SUBDIRS); do\
-		$(MAKE) -C $$dir;\
+		$(MAKE) -C $$dir compile;\
+	done
+
+debug:
+	@for dir in $(SUBDIRS); do\
+		$(MAKE) -C $$dir debug;\
 	done
 
 lib:

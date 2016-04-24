@@ -11,13 +11,16 @@ OBJS=$(patsubst %.cpp, $(DIR)/%.o, $(SOURCES))
 
 compile: $(TARGET)
 
-.PHONY: compile debug lib clean
+.PHONY: compile lib clean
 
 $(TARGET) : $(OBJS)
 
 $(DIR)/%.o : %.cpp
 	@mkdir -p $(DIR)
 	$(GCC) $(CXXFLAGS) $(IFLAGS) $(LFLAGS) -c -o $@ $<
+
+debug: CXXFLAGS=-std=c++11 -g -O0
+debug: compile 
 
 lib :
 	ar rcs $(DIR)/libgraph.a $(DIR)/*.o
