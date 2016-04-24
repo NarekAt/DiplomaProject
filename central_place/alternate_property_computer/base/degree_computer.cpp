@@ -10,8 +10,13 @@ DegreeComputer::computeImpl()
 {
     graph_types::graph_size size = graph_.size();
 
-    MT::parallel_for(0, size - 1, [&](unsigned index){
-            results_[index] = graph_.degree(index); });
+    for (unsigned index = 0; index != size; ++index)
+    {
+        std::cout << graph_.degree(index) << std::endl;
+        results_[index] = graph_.degree(index);
+    }
+    //MT::parallel_for(0, size - 1, [&](unsigned index){
+    //        results_[index] = graph_.degree(index); });
 }
 
 alternate_property_type
@@ -23,11 +28,14 @@ DegreeComputer::typeImpl() const
 DegreeComputer::ResultType
 DegreeComputer::getDistributionImpl() const
 {
-    ResultType distributions (results_.size(), 0u);
+    ResultType distributions;
 
     for (const auto& r : results_)
     {
-        distributions[r]++;
+        if (r >= distributions.size())
+            distributions.resize(r + 1);
+
+        ++(distributions[r]);
     }
     return distributions;
 }

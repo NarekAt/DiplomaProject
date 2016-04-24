@@ -56,13 +56,15 @@ ConnectedComponents::typeImpl() const
 ConnectedComponents::ResultType
 ConnectedComponents::getDistributionImpl() const
 {
-    ResultType distributions (results_.size(), 0u);
+    ResultType distributions;
 
     for (const auto& r : results_)
     {
-        distributions[r]++;
-    }
+        if (r >= distributions.size())
+            distributions.resize(r + 1);
 
+        ++(distributions[r]);
+    }
     return distributions;
 }
 

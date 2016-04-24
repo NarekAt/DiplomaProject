@@ -36,6 +36,16 @@ ShortestPath::typeImpl() const
 ShortestPath::ResultType
 ShortestPath::getDistributionImpl() const
 {
+    ResultType distributions;
+
+    for (const auto& r : results_)
+    {
+        if (r >= distributions.size())
+            distributions.resize(r + 1);
+
+        ++(distributions[r]);
+    }
+    return distributions;
 }
 
 

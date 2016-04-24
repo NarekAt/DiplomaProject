@@ -20,9 +20,7 @@ graph_item_property_task_manager::run()
 {
     for (const alternate_property_type& type : m_graph_item_related_apts)
     {
-        Base::PropertyComputerRunner::compute_and_write(m_initial_graph, type);
-        if (m_calc_distr)
-            Base::PropertyComputerRunner::calculate_distributions_and_write(m_initial_graph, type);
+        Base::PropertyComputerRunner::compute_and_write(m_initial_graph, type, m_calc_distr);
     }
 }
 

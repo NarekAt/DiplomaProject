@@ -19,7 +19,7 @@ public:
 
     virtual void compute() = 0;
     virtual void writeResults() const = 0;
-    virtual void writeDitribution() const = 0;
+    virtual void writeDistribution() const = 0;
 
 };
 
@@ -41,7 +41,7 @@ public:
          mediator::get_instance().write_results(_t.getResult(), _t.type());
      }
 
-     virtual void writeDitribution() const
+     virtual void writeDistribution() const
      {
          try
          {
@@ -97,10 +97,8 @@ class PropertyComputerRunner
 {
 public:
     static void compute_and_write(graph_types::graph& g,
-                                  alternate_property_type const p);
-
-    static void calculate_distributions_and_write(graph_types::graph& g,
-                                  alternate_property_type const p);
+                                  alternate_property_type const p,
+                                  bool calcDistr);
 };
 
 }

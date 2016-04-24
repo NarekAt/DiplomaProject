@@ -33,7 +33,7 @@ PropertyComputerController::createPropertyComputer(alternate_property_type const
 ////////////////////// PropertyComputerRunner /////////////////////////
 
 void
-PropertyComputerRunner::compute_and_write(graph_types::graph& g, alternate_property_type const p)
+PropertyComputerRunner::compute_and_write(graph_types::graph& g, alternate_property_type const p, bool calcDistr)
 {
     auto& ctrl = PropertyComputerController::getInstance();
     std::unique_ptr<Holder> holder = ctrl.createPropertyComputer(p, g);
@@ -45,20 +45,9 @@ PropertyComputerRunner::compute_and_write(graph_types::graph& g, alternate_prope
 
     holder->compute();
     holder->writeResults();
-}
 
-void
-PropertyComputerRunner::calculate_distributions_and_write(graph_types::graph& g, alternate_property_type const p)
-{
-    auto& ctrl = PropertyComputerController::getInstance();
-    std::unique_ptr<Holder> holder = ctrl.createPropertyComputer(p, g);
-    if (not holder)
-    {
-        std::cerr << "Unknown type " << (int)p << "\n";
-        return;
-    }
-
-    holder->writeDitribution();
+    if (calcDistr)
+        holder->writeDistribution();
 }
 
 }
