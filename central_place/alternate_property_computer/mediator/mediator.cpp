@@ -70,27 +70,27 @@ void mediator::init(const arg_name_to_value_map& a_n_v)
 }
 
 void
-mediator::init(const CFGParser::Config& config)
+mediator::init(const CFGParser::Config& config, unsigned process_rank)
 {
     assert(!m_inited);
     m_inited = true;
+    m_process_rank = process_rank;
 
     m_graphPaths = config.gpList;
     m_calc_distr = config.calculateDistr;
     m_calc_avg = config.calculateAvg;
-    m_auto_detect_communities = config.autoDetectCommunities;
     m_alternate_property_types = config.aptList;
 }
 
 void mediator::run_item_prop_task_mgr(boost::mpi::communicator& world)
 {
-    std::string dirPrefix = "_graph_" + std::to_string(world.rank());
+    std::string dirPrefix = "_graph_" + std::to_string(m_process_rank);
     results_writer::get_instance().prapare_writer(m_vertex_count, m_probability, dirPrefix);
 
     erdos_renyi_reader r;
     graph_types::graph graph (graph_types::storage_core_type::BITSETS_FULL);
 
-    assert(world.size() == m_graphPaths.size());
+//    assert(world.size() == m_graphPaths.size());
     r.get_graph_and_properties_from_file(m_graphPaths[world.rank()],
     graph, m_vertex_count, m_probability);
 
@@ -126,7 +126,9 @@ void mediator::run(boost::mpi::communicator& world)
         run_item_prop_task_mgr(world);
     }
     else
+    {
         run_global_prop_task_mgr(world);
+    }
 }
 
 void mediator::write_results(const single_results_list& s_r, double mu) const

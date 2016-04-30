@@ -347,7 +347,7 @@ ComboDetector::getCommunityGraphs() const
     ResultType resultGraphs;
     for (const auto& entry : graphSizes)
     {
-        resultGraphs.push_back(graph_types::graph(entry.second));
+        resultGraphs.push_back(graph_types::graph(entry.second, graph_types::storage_core_type::SORTED_VECTORS_FULL));
     }
 
     for (const auto& e : edges)

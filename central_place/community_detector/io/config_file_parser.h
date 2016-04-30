@@ -41,6 +41,7 @@ public:
         APTList     aptList;
         bool        calculateAvg;
         bool        calculateDistr;
+        bool        autoDetectCommunities;
     };
 
 public:

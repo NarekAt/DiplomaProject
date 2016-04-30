@@ -38,7 +38,7 @@ public:
      * @param consfig parsed configuration file.
      * @note must be called before run() function, and only one time.
      */
-    void init(const CFGParser::Config& config);
+    void init(const CFGParser::Config& config, unsigned process_rank);
 
 public:
     /**
@@ -103,10 +103,10 @@ private:
     GraphPaths               m_graphPaths;
     bool                     m_calc_distr;
     bool                     m_calc_avg;
-    bool                     m_auto_detect_communities;
     mu_list                  m_mu_list;
     unsigned                 m_step_count;
     randomization_type       m_randomization_type;
+    unsigned                 m_process_rank;
 
     apt_list                 m_alternate_property_types;
     unsigned                 m_non_item_relateds_count;

@@ -14,7 +14,7 @@
 
 namespace {
 
-std::string get_log_file_name()
+std::string get_log_file_name(unsigned process_rank)
 {
     auto d = boost::filesystem::status("./Logs");
     if (!boost::filesystem::exists(d)) {
@@ -26,7 +26,7 @@ std::string get_log_file_name()
     char buf[100];
     strftime(buf, sizeof(buf), "%Y.%m.%d_%H.%M.%S", ptm);
     std::string file_name = std::string("./Logs/") + std::string("apc_") + 
-        std::string(buf) + std::string(".log");
+        std::string(buf) + std::string("_") + std::to_string(process_rank) + std::string(".log");
     auto f = boost::filesystem::status(file_name);
     assert(!boost::filesystem::exists(f));
     return file_name;
@@ -38,23 +38,36 @@ int main(int argc, char* argv[])
 {
     boost::mpi::environment env(argc, argv);
     boost::mpi::communicator world;
-    std::ofstream logger;
-    if (0 == world.rank() || 1 == world.size()) {
-        logger.open(get_log_file_name());
+
+    bool item_property_configuration = argc == 3;
+    unsigned process_rank = world.rank();
+
+    if(item_property_configuration) {
+        try
+        {
+            process_rank += boost::lexical_cast<unsigned>(argv[2]);
+        } catch (boost::bad_lexical_cast& e) {
+            std::cout << std::endl << "ERROR: "
+                << e.what() << std::endl;
+            env.abort(-1);
+        }
     }
+
+    std::ofstream logger;
+    logger.open(get_log_file_name(process_rank));
     package::init(logger);
     
     try
     {
         auto& m = mediator::get_instance();
-        if(argc != 2) 
+        if(!item_property_configuration)
         {
             auto& a_p = argument_parser::get_instance();
-            m.init(a_p.parse_and_get_args(argc, argv, world.rank()));
+            m.init(a_p.parse_and_get_args(argc, argv, process_rank));
         }
         else
         {
-            m.init(CFGParser::parse(argv[1]));
+            m.init(CFGParser::parse(argv[1]), process_rank);
         } 
         m.run(world);
     } catch (const exception_base& e) {
