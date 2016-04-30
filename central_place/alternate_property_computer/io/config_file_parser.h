@@ -16,6 +16,7 @@
 //     </properties>
 //     <calculate-distribution></calculate-distribution>
 //     <calcuate-average></calcuate-average>
+//     <auto-detect-communities></auto-detect-communities>
 // </config>
 
 #ifndef INCLUDED__CONFIG_FILE_PARSER_H
@@ -40,6 +41,7 @@ public:
         APTList     aptList;
         bool        calculateAvg;
         bool        calculateDistr;
+        bool        autoDetectCommunities;
     };
 
 public:

@@ -12,7 +12,6 @@ DegreeComputer::computeImpl()
 
     for (unsigned index = 0; index != size; ++index)
     {
-        std::cout << graph_.degree(index) << std::endl;
         results_[index] = graph_.degree(index);
     }
     //MT::parallel_for(0, size - 1, [&](unsigned index){

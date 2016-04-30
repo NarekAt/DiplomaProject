@@ -22,6 +22,7 @@ CFGParser::Config CFGParser::parse(const std::string& cfgFilePath)
 
         config.calculateAvg = pt.get<bool>("config.calculate-average");
         config.calculateDistr = pt.get<bool>("config.calculate-distribution");
+        config.autoDetectCommunities = pt.get<bool>("config.auto-detect-communities");
     }
     catch(...)
     {

@@ -103,6 +103,7 @@ private:
     GraphPaths               m_graphPaths;
     bool                     m_calc_distr;
     bool                     m_calc_avg;
+    bool                     m_auto_detect_communities;
     mu_list                  m_mu_list;
     unsigned                 m_step_count;
     randomization_type       m_randomization_type;

@@ -78,6 +78,7 @@ mediator::init(const CFGParser::Config& config)
     m_graphPaths = config.gpList;
     m_calc_distr = config.calculateDistr;
     m_calc_avg = config.calculateAvg;
+    m_auto_detect_communities = config.autoDetectCommunities;
     m_alternate_property_types = config.aptList;
 }
 
