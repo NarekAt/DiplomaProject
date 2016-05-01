@@ -2,7 +2,7 @@
 
 config=$1
 graphCount=$(xmllint --xpath 'count(//config/graphs/graph-path)' $config)
-maxProcCount=$(xmllint --xpath 'count(//config/max-parallel-proc-count)' $config)
+maxProcCount=$(xmllint --xpath 'number(//config/max-parallel-proc-count)' $config)
 calculateAvg=$(xmllint --xpath 'string(//config/calculate-average)' $config)
 communityGraph=$(xmllint --xpath 'string(//config/community-graph)' $config)
 
@@ -15,7 +15,11 @@ function run {
     else
         fromIndex=0
         while [ $graphCount -gt 0 ]; do
-            processCount=[ $graphCount -gt $maxProcCount ] && $maxProcCount || $graphCount
+            if [ $graphCount -gt $maxProcCount ]; then
+                processCount=$maxProcCount
+            else
+                processCount=$graphCount
+            fi
             graphCount=$(( $graphCount - $maxProcCount ))
             
             mpirun -np $processCount ./alternate_property_computer.exe $config $fromIndex
@@ -49,28 +53,31 @@ function addTag {
 }
 
 function generateAndRun {
+    communityConfigPath="./community_graphs/community.xml"
+    
     # Generating graphs
     ./community_detector.exe $communityGraph
     
     # Creating new config file
-    cp $config ./community_graphs/community.xml
+    cp $config $communityConfigPath
     
     # Removing graphs and communityGraph
-    removeTag "community.xml" "graph-path"
-    removeTag "community.xml" "community-graph"
+    removeTag $communityConfigPath "graph-path"
+    removeTag $communityConfigPath "community-graph"
     
     # Adding generated graphs to file
-    paths=($(find ./community_graphs | grep "community_graph"))
+    paths=($(find ./community_graphs | grep "community_graphs/community_graph"))
     
     for (( i = 0; i < ${#paths[@]}; i++ )); do
-        addTag "community.xml" "graphs" "graph-path" ${paths[i]}
+        addTag $communityConfigPath "graphs" "graph-path" ${paths[i]}
     done
     
     # Hamadzayn em tapor lucum a
     cp apc_runner.sh community_graphs
+    cp avg_calc.sh community_graphs
     cp alternate_property_computer.exe community_graphs
     
-    ./community_graphs/apc_runner.sh community.xml 
+    (cd community_graphs && ./apc_runner.sh community.xml && cd ../) 
 }
 
 [ ! -z $communityGraph ] && generateAndRun
