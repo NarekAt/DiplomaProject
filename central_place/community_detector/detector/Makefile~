@@ -1,5 +1,0 @@
-TARGET=compile
-include ../common.mk
-
-
-IFLAGS=-I../../alternate_property_computer/graph_types
