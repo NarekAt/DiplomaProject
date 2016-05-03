@@ -13,6 +13,7 @@
 
 namespace {
     const std::string GRAPH_FILE_NAME_PREFIX = "./community_graphs/community_graph_";
+    const std::string GRAPH_FILE_NAME_POSTFIX = ".txt";
 
     std::string createLogFile()
     {
@@ -44,7 +45,7 @@ namespace {
 
         for(int i = 0; i < graphs.size(); ++i)
         {
-            std::string filePath = GRAPH_FILE_NAME_PREFIX + std::to_string(i);
+            std::string filePath = GRAPH_FILE_NAME_PREFIX + std::to_string(i) + GRAPH_FILE_NAME_POSTFIX;
             w.run(graphs[i], graphs[i].size(), -1, filePath, logger);
         }
     }
