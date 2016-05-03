@@ -66,7 +66,7 @@ function generateAndRun {
     removeTag $communityConfigPath "community-graph"
     
     # Adding generated graphs to file
-    paths=($(find ./community_graphs | grep "community_graphs/community_graph"))
+    paths=($(find ./community_graphs/ -name "community_graph*txt" -type f -printf "%f\n"))
     
     for (( i = 0; i < ${#paths[@]}; i++ )); do
         addTag $communityConfigPath "graphs" "graph-path" ${paths[i]}
