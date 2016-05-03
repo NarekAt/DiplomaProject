@@ -1,7 +1,7 @@
 TARGET=community_detector.exe
 include ../common.mk
 
-SUBDIRS=../graph_types ../detector /home/natayan/libs_space/libxl-3.6.5.0/lib64 ../writer ../common ../io ../main
+SUBDIRS=../graph_types ../detector ../../shared_libs/libxl-3.6.5.0/lib64 ../writer ../common ../io ../main
 OBJS=$(wildcard $(join $(SUBDIRS), $(DIR)/*.o))
 
 $(TARGET) : $(OBJS)
