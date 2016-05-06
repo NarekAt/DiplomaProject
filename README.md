@@ -1,7 +1,7 @@
 Diploma project
 ======
 Advanced Graph Analyzer
-(master thesis project repository)
+(master diploma project repository)
 ## User Manual
 
 
@@ -21,24 +21,28 @@ Advanced Graph Analyzer
 ##### Steps for external libs installation:
 -	From central place, cd install/compile directory and run load_external_libs.sh script.
 This will automatically configure OGDF and libxl packages.
--	The installation also requires following packages to be installed: Eigen, igraph.
+-	The installation also requires following packages to be installed: Eigen (https://eigen.tuxfamily.org/dox/GettingStarted.html), igraph (http://igraph.org/c/).
 
 ### 2. Building system
--	From central place, cd subsystem for which you want to (re)-generate executable and run make or make debug, for release and debug builds correspondingly. The location of generated executable is $(pwd)/lib/ directory. 
+-	From central place, cd subsystem for which you want to (re)-generate executable and run make or make debug, for release and debug builds correspondingly. The location of generated executable is $(pwd)/lib/ directory.
 
 ### 3. Testing system (Unit tests)
-./unit_tests/run_tests.sh – For running all existing unit_tests
+    ./unit_tests/run_tests.sh – For running all existing unit_tests
 
 ### 4. Practical Usage
 #####	Graph Generation
-graph_generator.exe –M [random_graph_model] -N [number_of_vertices] -p [probability] –E [number_of_edges] –f [output_file] –t [storage_core_type]
+    graph_generator.exe –M [random_graph_model] -N [number_of_vertices] -p [probability] –E [number_of_edges] –f [output_file] –t [storage_core_type]
  
-Note: number_of_edges and probability are mutually exclusive properties 1st should be specified only in case of Block-Hierarchical model and 2nd for Erdos-Reyni model.
+ *Note: number_of_edges and probability are mutually exclusive properties 1st should be specified only in case of Block-Hierarchical model and 2nd for Erdos-Reyni model.*
 
 ##### Alternate Property Computer and Community Detection
-./scripts/apc_runner.sh [configuration file]
+    ./scripts/apc_runner.sh [configuration file]
 
 ##### Graph Converter
-graph_converter.exe [flag] [first_file_name] [second_file_name] 
+    graph_converter.exe [flag] [first_file_name] [second_file_name] 
 
-Note: [flag] is 'b', then [first_file_name] must be boost graph file name, [second_file_name] must be standard graph file name.If [flag] is 's', then [first_file_name] must be standard graph file name, [second_file_name] must be boost graph file name.
+ *Note: [flag] is 'b', then [first_file_name] must be boost graph file name, [second_file_name] must be standard graph file name.If [flag] is 's', then [first_file_name] must be standard graph file name, [second_file_name] must be boost graph file name.*
+
+### 5. Developers Guide
+####### A couple of additional things to be done after the installation step
+- Install if needed the gtest unit-tests library (https://github.com/google/googletest).
