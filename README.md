@@ -14,7 +14,7 @@ Advanced Graph Analyzer
 -	make && sudo make install (this will install mpich3 to /usr/local/lib, /usr/local/bin etc.), note: All versions of mpi must be uninstalled before installation with this instruction. 
 -	 Download boost source (do not install with apt-get, it is needed to compile it using mpi settings) http://sourceforge.net/projects/boost/files/boost/1.53.0/. Then set BOOST_LIBS environment variable to point on boost installation directory.
 -	 Read http://www.boost.org/doc/libs/1_53_0/doc/html/mpi/getting_started.html#mpi.config
--	When building boost, edit user-config.jam file and add following line: using mpi : /usr/local/bin/mpic++ ; (don't miss up white spaces around ':' and ';').
+-	When building boost, edit user-config.jam file and add following line:  '<using mpi : /usr/local/bin/mpic++ ;> (don't miss up white spaces around ':' and ';').
 -	Make sure that all previous versions of mpich3 are uninstalled.
 -	Proceed to building and installing of boost.
 
