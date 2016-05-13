@@ -37,10 +37,31 @@ This will automatically configure OGDF and libxl packages.
 
 ##### Alternate Property Computer and Community Detection
     ./scripts/apc_runner.sh [configuration file]
+###### Configuration input file prototype
+
+    <?xml version="1.0"?>
+    <config>
+    <graphs>
+        <graph-path></graph-path>
+    </graphs>
+    <community-graph></community-graph>
+    <properties>
+        <property></property>
+        <property></property>
+        <property></property>
+        <property></property>
+    </properties>
+    <calculate-distribution></calculate-distribution>
+    <calcuate-average></calcuate-average>
+    <max-parallel-proc-count></max-parallel-proc-count>
+    </config>
 
 ##### Property Average Calculation
-    ./scripts/avg_calc.sh file calculates and stores averages of properties given in config.xml under avg_results folder.
-    To enable this feature user must set calcuate-average option in configuration file as true(or 1)    
+
+    ./scripts/avg_calc.sh
+    
+*Calculates and stores averages of properties given in config.xml under avg_results folder.
+To enable this feature user must set calcuate-average option in configuration file as true(or 1)*
 ##### Graph Converter
     graph_converter.exe [flag] [first_file_name] [second_file_name] 
 
