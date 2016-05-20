@@ -38,7 +38,7 @@ This will automatically configure OGDF and libxl packages.
 ##### Alternate Property Computer and Community Detection
     ./scripts/apc_runner.sh [configuration file]
 ###### Configuration input file prototype
-
+``` xml
     <?xml version="1.0"?>
     <config>
     <graphs>
@@ -55,7 +55,7 @@ This will automatically configure OGDF and libxl packages.
     <calcuate-average></calcuate-average>
     <max-parallel-proc-count></max-parallel-proc-count>
     </config>
-
+```
 ##### Property Average Calculation
 
     ./scripts/avg_calc.sh
